@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Game Sales Data</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<header>
+    <h1>Video Game Sales Data</h1>
+    <nav>
+        <a href="#">Home</a>
+        <a href="userLogin.html">Sign Up & Login</a>
+    </nav>
+</header>
+
+<p>This page provides data on video game sales. The data is from 2019.</p>
+
+<input type="text" id="search" placeholder="Search by genre, rating, publisher, or developer">
+
+<button id="filter">Change Filter</button>
+
+<select id="filter-options">
+    <option value="genre">Genre</option>
+    <option value="rating">Rating</option>
+    <option value="publisher">Publisher</option>
+    <option value="developer">Developer</option>
+</select>
+
+<table>
+    <thead>
+    <tr>
+        <th>Game</th>
+        <th>Sales (millions)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Call of Duty: Modern Warfare</td>
+        <td>31.1</td>
+    </tr>
+    <tr>
+        <td>Grand Theft Auto V</td>
+        <td>23.7</td>
+    </tr>
+    <tr>
+        <td>Pokémon Sword and Shield</td>
+        <td>21.9</td>
+    </tr>
+    <tr>
+        <td>Red Dead Redemption 2</td>
+        <td>21.4</td>
+    </tr>
+    <tr>
+        <td>Super Mario Odyssey</td>
+        <td>17.3</td>
+    </tr>
+    </tbody>
+</table>
+
+<script src="index.js"></script>
+
+</body>
+</html>
