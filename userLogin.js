@@ -11,3 +11,9 @@ function validateForm() {
 }
 
 document.getElementById("form").addEventListener("submit", validateForm);
+
+function createAccount() {
+    window.location.href = "userLogin.html";
+}
+
+document.getElementById("createAccount").addEventListener("click", createAccount);
