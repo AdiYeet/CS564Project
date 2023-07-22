@@ -1,6 +1,6 @@
 #CS564Project
 
-![steam.jpg](..%2F..%2FDownloads%2Fsteam.jpg)
+![alt text](https://github.com/Rovert515/CS564Project/blob/main/steam.jpg?raw=true)
 
 For our project for CS564, we looked into global video game sales. The database entries include important qualifiers,
 such as year, sales, region, and critic/user rating. Our application is built in Java with frontend being created in
@@ -9,4 +9,4 @@ every game included. The data is from Steam's database in 2019. Analyzing video 
 the ability to analyze sales trends can help developers determine what genre to choose for their games. This in turn 
 can help publishers generate more profit by optimizing cost of development while also prioritizing revenue.
 
-![videoGameSpreadsheet.png](..%2F..%2FDownloads%2FvideoGameSpreadsheet.png)
+![alt text](https://github.com/Rovert515/CS564Project/blob/main/videoGameSpreadsheet.png?raw=true)
