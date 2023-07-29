@@ -51,4 +51,60 @@ function changeFilter() {
     }
 }
 
+const searchBar = document.getElementById('search-bar');
+const filterOptions = document.getElementById('filter-options');
+const table = document.getElementById('table');
+
+// Function to filter the table rows
+function filterRows(searchTerm, filterType) {
+    const rows = table.querySelectorAll('tr');
+    const filteredRows = [];
+
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const gameName = row.querySelector('td:first-child').textContent;
+
+        if (searchTerm.length === 0 || gameName.toLowerCase().includes(searchTerm.toLowerCase())) {
+            if (filterType === 'genre') {
+                const genre = row.querySelector('td:nth-child(2)').textContent;
+                if (genre.toLowerCase().includes(filterType.toLowerCase())) {
+                    filteredRows.push(row);
+                }
+            } else if (filterType === 'rating') {
+                const rating = row.querySelector('td:nth-child(3)').textContent;
+                if (rating.toLowerCase().includes(filterType.toLowerCase())) {
+                    filteredRows.push(row);
+                }
+            } else if (filterType === 'publisher') {
+                const publisher = row.querySelector('td:nth-child(4)').textContent;
+                if (publisher.toLowerCase().includes(filterType.toLowerCase())) {
+                    filteredRows.push(row);
+                }
+            } else if (filterType === 'developer') {
+                const developer = row.querySelector('td:nth-child(5)').textContent;
+                if (developer.toLowerCase().includes(filterType.toLowerCase())) {
+                    filteredRows.push(row);
+                }
+            }
+        }
+    }
+
+    table.innerHTML = '';
+    filteredRows.forEach(row => table.appendChild(row));
+}
+
+// Event listener for the search bar
+searchBar.addEventListener('input', (event) => {
+    const searchTerm = event.target.value;
+    filterRows(searchTerm, filterOptions.value);
+});
+
+// Event listener for the filter options select element
+filterOptions.addEventListener('change', (event) => {
+    const filterType = event.target.value;
+    const searchTerm = searchBar.value;
+    filterRows(searchTerm, filterType);
+});
+
+
 document.getElementById("filter").addEventListener("click", changeFilter);

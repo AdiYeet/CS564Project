@@ -26,6 +26,16 @@ nav a:hover {
 
 body {
     font-family: sans-serif;
+    margin: 5px;
+    padding: 0;
+}
+
+p {
+    max-width: 1000px;
+}
+
+div {
+    margin-bottom: 10px;
 }
 
 h1 {
@@ -85,3 +95,19 @@ input[type="text"] {
 button {
     cursor: pointer;
 }
+
+.filter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    width: 200px;
+}
+
+select {
+    width: 150px;
+}
+
