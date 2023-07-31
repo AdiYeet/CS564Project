@@ -10,7 +10,7 @@ public class Platform {
   // create strings to store mysql login
   static final String url = "jdbc:mysql://localhost:3306/ProjTest";
   static final String user = "root";
-  static final String password = "sqlPass#7";
+  static final String password = "";
 
   static Integer platform_id = null; // Integer wrapper class instead of int so we can have null values
   static String platform_name = null;

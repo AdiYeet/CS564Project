@@ -13,7 +13,7 @@ public class Users {
   // create strings to store mysql login
   static final String url = "jdbc:mysql://localhost:3306/ProjTest";
   static final String user = "root";
-  static final String password = "sqlPass#7";
+  static final String password = "";
 
   /**
    * Method to add user
