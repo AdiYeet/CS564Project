@@ -132,6 +132,7 @@ public class Users {
 
     } catch (Exception e) {
       e.printStackTrace();
+      return false;
     } finally {
       // close statement idk why yet but you have to
       if (statement != null) {
@@ -139,6 +140,7 @@ public class Users {
           statement.close();
         } catch (SQLException sqlE1) {
           sqlE1.printStackTrace();
+          return false;
         }
       }
 
@@ -148,6 +150,7 @@ public class Users {
           connection.close();
         } catch (SQLException sqlE2) {
           sqlE2.printStackTrace();
+          return false;
         }
       }
     }
@@ -188,6 +191,7 @@ public class Users {
 
     } catch (Exception e) {
       e.printStackTrace();
+      return false;
     } finally {
       // close statement idk why yet but you have to
       if (statement != null) {
@@ -195,6 +199,7 @@ public class Users {
           statement.close();
         } catch (SQLException sqlE1) {
           sqlE1.printStackTrace();
+          return false;
         }
       }
 
@@ -204,6 +209,7 @@ public class Users {
           connection.close();
         } catch (SQLException sqlE2) {
           sqlE2.printStackTrace();
+          return false;
         }
       }
     }
