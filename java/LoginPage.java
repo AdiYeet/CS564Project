@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LoginPage implements ActionListener {
+public class LoginPage extends JFrame {
 
   // field declarations
   private static JLabel userLabel;
@@ -19,14 +19,62 @@ public class LoginPage implements ActionListener {
   private static JLabel status;
   private static JButton signUpButton;
 
-  public void setup() {
+  void userVerification() {
+
+    // method checks which button is clicked and calls specific backend methods to query database
+    // and figure out whether user can be added/verified
+
+    // status.setText("");
+    String user = userText.getText(); // get username
+    String password = passwordText.getText(); // get password
+    // System.out.println(user + "," + password);
+
+    if (Users.verifyUser(user, password)) {
+      // verifies user and sets status text
+      status.setText("Login successful!");
+      HomePage home = new HomePage(user);
+      home.show();
+      this.dispose();
+
+    } else {
+      status.setText("Login failed!");
+    }
+
+  }
+
+  void addUser() {
+
+    String user = userText.getText(); // get username
+    String password = passwordText.getText(); // get password
+
+    try {
+
+      boolean returned = Users.addUser(user, password);
+      if (returned) {
+        // adds user and sets status text
+        status.setText("Sign up successful!");
+        HomePage home = new HomePage(user);
+        home.show();
+        this.dispose();
+
+      } else {
+        status.setText("Sign up unsuccessful! Please check console for error.");
+      }
+
+    } catch (SQLException e2) {
+      e2.printStackTrace();
+    }
+
+  }
+
+
+  public LoginPage() {
 
     // setup panel and frame
     JPanel panel = new JPanel();
-    JFrame frame = new JFrame();
-    frame.setSize(800, 500);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.add(panel);
+    setSize(800, 500);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    add(panel);
 
     panel.setLayout(null);
 
@@ -59,55 +107,24 @@ public class LoginPage implements ActionListener {
     // setup text for login/sign up status
     status = new JLabel("");
     status.setBounds(10, 110, 500, 25);
-    loginButton.setActionCommand("Login");
-    signUpButton.setActionCommand("Sign Up");
-    loginButton.addActionListener(new LoginPage()); // call backend methods to verify user
-    signUpButton.addActionListener(new LoginPage()); // call backend methods to add user
+    
+    loginButton.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        userVerification();
+      }}); // call backend methods to verify user
+    
+    signUpButton.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        addUser();
+      }}); // call backend methods to add user
+    
     panel.add(status);
 
-    frame.setVisible(true);
-
-  }
-
-  @Override
-  public void actionPerformed(ActionEvent e) {
-
-    // method checks which button is clicked and calls specific backend methods to query database
-    // and figure out whether user can be added/verified
-
-    status.setText("");
-    String user = userText.getText(); // get username
-    String password = passwordText.getText(); // get password
-    System.out.println(user + "," + password);
-
-    // checks if button clicked is login button or sign up button
-    if (e.getActionCommand().equals("Login")) {
-      
-      if (Users.verifyUser(user, password)) {
-        // verifies user and sets status text
-        status.setText("Login successful!");
-        
-      } else {
-        status.setText("Login failed!");
-      }
-      
-    } else if (e.getActionCommand().equals("Sign Up")) {
-      
-      try {
-        
-        boolean returned = Users.addUser(user, password);
-        if (returned) {
-          // adds user and sets status text
-          status.setText("Sign up successful!");
-        } else {
-          status.setText("Sign up unsuccessful! Please check console for error.");
-        }
-        
-      } catch (SQLException e2) {
-        e2.printStackTrace();
-      }
-      
-    }
+    setVisible(true);
 
   }
 
