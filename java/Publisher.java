@@ -200,7 +200,7 @@ public class Publisher {
         }
       }
     }
-    System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
+    //System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
     return resultArray;
   }
   

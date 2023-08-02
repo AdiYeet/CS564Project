@@ -73,7 +73,7 @@ public class VideoGames {
         }
       }
     }
-    System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
+    //System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
     return resultArray;
   }
 
@@ -145,7 +145,7 @@ public class VideoGames {
       }
     }
     // System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
-    System.out.println(Arrays.toString(resultArray));
+    // System.out.println(Arrays.toString(resultArray));
     return resultArray;
   }
 

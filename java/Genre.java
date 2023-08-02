@@ -202,7 +202,7 @@ public class Genre {
         }
       }
     }
-    System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
+    //System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
     return resultArray;
   }
 
@@ -210,8 +210,8 @@ public class Genre {
     getGenreID("Sports");
     getGenreID("Platform");
     getGenreID("doesntexist"); // shouldnt work
-    getGenreName(16722);
-    getGenreName(16738);
+    getGenreName(13910);
+    getGenreName(13908);
     getGenreName(3); // shouldnt work
     searchByGenre("Sports"); // should be 2306 
     searchByGenre("Action"); // should be 3297
