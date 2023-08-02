@@ -4,7 +4,7 @@ BEFORE YOU TRY TO RUN THE FILE on your IDE make ALL OF THE following changes to 
 1) Create a new Java project and after you add the Users.java file to your src folder/ default package, download the jar (click on the button that says jar 2.4 mb next to the Files section in the tables at the top and the download should start) from the following link: https://mvnrepository.com/artifact/com.mysql/mysql-connector-j/8.1.0
 JDBC WILL NOT WORK without this jar file so make sure you add it to your Java Project Build Path
 
-2) Make sure the schema where your "users" table is located on your mysql is specifically called "ProjTest" since that is what I named mine and trying to change that will mean changing a bunch of unnecessary lines of code
+2) Make sure the schema where your "users" table is located on your mysql is specifically called "project" since that is what I named mine and trying to change that will mean changing a bunch of unnecessary lines of code
 
 3) In the first line after "public class Users {" you will see a section where I am initializing strings for "mysql login". In there the url and user section should be fine unchanged but just check them out once. Change the password string to exactly whatever your mysql root password is.
 
