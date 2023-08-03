@@ -21,13 +21,10 @@ public class LoginPage extends JFrame {
 
   void userVerification() {
 
-    // method checks which button is clicked and calls specific backend methods to query database
-    // and figure out whether user can be added/verified
+    // method calls specific backend methods to query database and verify user
 
-    // status.setText("");
     String user = userText.getText(); // get username
     String password = passwordText.getText(); // get password
-    // System.out.println(user + "," + password);
 
     if (Users.verifyUser(user, password)) {
       // verifies user and sets status text
@@ -35,14 +32,14 @@ public class LoginPage extends JFrame {
       HomePage home = new HomePage(user);
       home.show();
       this.dispose();
-
     } else {
       status.setText("Login failed!");
     }
-
   }
 
   void addUser() {
+    
+    // method calls specific backend methods to query database and add user
 
     String user = userText.getText(); // get username
     String password = passwordText.getText(); // get password
@@ -50,6 +47,7 @@ public class LoginPage extends JFrame {
     try {
 
       boolean returned = Users.addUser(user, password);
+      
       if (returned) {
         // adds user and sets status text
         status.setText("Sign up successful!");
@@ -69,6 +67,8 @@ public class LoginPage extends JFrame {
 
 
   public LoginPage() {
+    
+    setTitle("Video Games App"); // set title of app
 
     // setup panel and frame
     JPanel panel = new JPanel();
