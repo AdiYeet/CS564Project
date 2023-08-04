@@ -24,7 +24,7 @@ public class HomePage extends JFrame {
   private static JComboBox searchType;
   private static JTextField searchField;
   private static JButton search;
-  private static String username;
+  public static String username;
   private static JList list;
 
 
@@ -171,5 +171,12 @@ public class HomePage extends JFrame {
 
     setVisible(true);
 
+  }
+  
+  // placeholder method to test
+  public static String getUsername() {
+    //return username;
+    //return "aditya"; // for testing
+    return "tjohnson"; // for testing
   }
 }
