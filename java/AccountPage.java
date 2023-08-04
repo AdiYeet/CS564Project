@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ public class AccountPage extends JFrame {
   private static String username;
   private static JButton deleteAcc = new JButton("Delete User");
   private static JButton homeBtn = new JButton("Back to Home");
+  private static JButton logOut = new JButton("Log Out");
   private static JList<String> gamesList;
   private static JList<String> genresList;
 
@@ -61,9 +63,12 @@ public class AccountPage extends JFrame {
     userPanel.add(userLabel);
 
     // create central panel
-    JPanel central = new JPanel(new FlowLayout());
+    JPanel central = new JPanel(new GridLayout(0,3));
     
     // show liked games
+    JLabel gameLabel = new JLabel("    Liked Games");
+    gameLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
+    central.add(gameLabel);
     ArrayList<Integer> gameids = GameThoughts.getLikedGames(username);
     String[] likedGames = new String[gameids.size()];
     int index = 0;
@@ -75,8 +80,13 @@ public class AccountPage extends JFrame {
     JScrollPane games = new JScrollPane(gamesList);
     games.setPreferredSize(new Dimension(300, 400));
     central.add(games);
+    
+    central.add(new JLabel(""));
 
     // show liked genres
+    JLabel genreLabel = new JLabel("    Liked Genres");
+    genreLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
+    central.add(genreLabel);
     ArrayList<Integer> genreids = GenreThoughts.getLikedGenres(username);
     String[] likedGenres = new String[genreids.size()];
     int index2 = 0;
@@ -88,6 +98,8 @@ public class AccountPage extends JFrame {
     JScrollPane genres = new JScrollPane(genresList);
     genres.setPreferredSize(new Dimension(300, 400));
     central.add(genres);
+    
+    central.add(new JLabel(""));
 
     // delete user option
     JPanel deletePanel = new JPanel(new FlowLayout());
@@ -116,6 +128,15 @@ public class AccountPage extends JFrame {
 
       }
 
+    });
+    
+    logOut.setPreferredSize(new Dimension(100, 25));
+    deletePanel.add(logOut);
+    logOut.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        switchLoginPage();
+      }
     });
 
 

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -15,8 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class HomePage extends JFrame {
 
@@ -29,6 +33,9 @@ public class HomePage extends JFrame {
   private static JButton search;
   private static String username;
   private static JList<String> list;
+  private static JList<String> platformsList;
+  private static JList<String> genresList;
+  private static JList<String> publishersList;
   private static JButton homeBtn = new JButton("Back to Home");
 
   void switchAccountPage() {
@@ -167,27 +174,57 @@ public class HomePage extends JFrame {
               // get info about game
               String[] game = VideoGames.returnAllData(VideoGames.getGameID(gameChosen));
 
-              JLabel gameName = new JLabel("Name: " + game[0]);
+              JLabel gameName = new JLabel("   Name: " + game[0]);
               results.add(gameName);
 
-              JLabel platformName = new JLabel("Platform: " + game[1]);
+              JLabel platformName = new JLabel("   Platform: " + game[1]);
               results.add(platformName);
 
-              JLabel year = new JLabel("Year released: " + game[2]);
+              JLabel year = new JLabel("   Year released: " + game[2]);
               results.add(year);
 
-              JLabel gameGenre = new JLabel("Genre: " + game[3]);
-              results.add(gameGenre);
+              JPanel genrePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-              JLabel publisherName = new JLabel("Publisher: " + game[4]);
+              JLabel gameGenre = new JLabel("   Genre: " + game[3]);
+              genrePanel.add(gameGenre);
+
+              JButton likeGenre = new JButton();
+              if (GenreThoughts.getPref(Genre.getGenreID(game[3]), username) == null
+                  || GenreThoughts.getPref(Genre.getGenreID(game[3]), username) == 0) {
+                likeGenre.setText("Like");
+              } else {
+                likeGenre.setText("Unlike");
+              }
+
+              likeGenre.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                  if (likeGenre.getText().equals("Like")) {
+                    GenreThoughts.setGenrePref(Genre.getGenreID(game[3]), true, username);
+                    likeGenre.setText("Unlike");
+                  } else {
+                    GenreThoughts.setGenrePref(Genre.getGenreID(game[3]), false, username);
+                    likeGenre.setText("Like");
+                  }
+                }
+
+              });
+
+              genrePanel.add(likeGenre);
+
+              results.add(genrePanel);
+
+
+              JLabel publisherName = new JLabel("   Publisher: " + game[4]);
               results.add(publisherName);
 
-              JLabel sales = new JLabel("Global Sales (in millions): " + game[5]);
+              JLabel sales = new JLabel("   Global Sales (in millions): " + game[5]);
               results.add(sales);
 
               JPanel ratingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-              JLabel ratingLabel = new JLabel("Rating: ");
+              JLabel ratingLabel = new JLabel("  Rating: ");
               ratingPanel.add(ratingLabel);
 
               Integer userRating =
@@ -226,7 +263,7 @@ public class HomePage extends JFrame {
 
               // add average rating
               Double avgRating = GameThoughts.getAvgRating(VideoGames.getGameID(gameChosen));
-              JLabel avgLabel = new JLabel("Average Rating: " + Double.toString(avgRating));
+              JLabel avgLabel = new JLabel("   Average Rating: " + Double.toString(avgRating));
               results.remove(ratingPanel);
               ratingPanel.remove(avgLabel);
               ratingPanel.add(avgLabel);
@@ -236,30 +273,30 @@ public class HomePage extends JFrame {
               // make likes panel with button and number of likes
               JPanel likesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-              JButton like = new JButton();
+              JButton likeGame = new JButton();
               if (GameThoughts.getPref(VideoGames.getGameID(gameChosen), username) == null
                   || GameThoughts.getPref(VideoGames.getGameID(gameChosen), username) == 0) {
-                like.setText("Like");
+                likeGame.setText("Like");
               } else {
-                like.setText("Unlike");
+                likeGame.setText("Unlike");
               }
 
-              like.addActionListener(new ActionListener() {
+              likeGame.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                  if (like.getText().equals("Like")) {
+                  if (likeGame.getText().equals("Like")) {
                     GameThoughts.setGamePref(VideoGames.getGameID(gameChosen), true, username);
-                    like.setText("Unlike");
+                    likeGame.setText("Unlike");
                   } else {
                     GameThoughts.setGamePref(VideoGames.getGameID(gameChosen), false, username);
-                    like.setText("Like");
+                    likeGame.setText("Like");
                   }
                 }
 
               });
 
-              likesPanel.add(like);
+              likesPanel.add(likeGame);
 
               Integer number = GameThoughts.numLikes(VideoGames.getGameID(gameChosen));
 
@@ -267,7 +304,7 @@ public class HomePage extends JFrame {
                 number = 0;
               }
 
-              JLabel numLikes = new JLabel("Number of Likes: " + Integer.toString(number));
+              JLabel numLikes = new JLabel("   Number of Likes: " + Integer.toString(number));
 
               likesPanel.add(numLikes);
 
@@ -301,6 +338,61 @@ public class HomePage extends JFrame {
       }
     });
 
+    // default top genres, publishers and platforms tables
+    Object[] col = {"Name", "Sales"};
+    DefaultTableModel platformModel = new DefaultTableModel(col, 0);
+
+    JTable platformsTable = new JTable(platformModel);
+    ArrayList<String[]> platformsFound = Platform.topByPlatform(); // call backend methods
+    for (String[] row : platformsFound) {
+      Object[] rowAdd = {row[0], row[1]};
+      platformModel.addRow(rowAdd);
+    }
+    platformsTable.setPreferredSize(new Dimension(300, 500));
+    JPanel platformsPanel = new JPanel (new BorderLayout());
+    platformsPanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
+                                                        "Top Platforms",
+                                                        TitledBorder.CENTER,
+                                                        TitledBorder.TOP));
+    platformsPanel.add(platformsTable, BorderLayout.CENTER);
+    platformsPanel.add(platformsTable.getTableHeader(), BorderLayout.NORTH);
+    results.add(platformsPanel);
+
+    DefaultTableModel genreModel = new DefaultTableModel(col, 0);   
+
+    JTable genreTable = new JTable(genreModel);
+    ArrayList<String[]> genresFound = Genre.topByGenre(); // call backend methods
+    for (String[] row : genresFound) {
+      Object[] rowAdd = {row[0], row[1]};
+      genreModel.addRow(rowAdd);
+    }
+    genreTable.setPreferredSize(new Dimension(300, 500));
+    JPanel genrePanel = new JPanel (new BorderLayout());
+    genrePanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
+                                                        "Top Genres",
+                                                        TitledBorder.CENTER,
+                                                        TitledBorder.TOP));
+    genrePanel.add(genreTable, BorderLayout.CENTER);
+    genrePanel.add(genreTable.getTableHeader(), BorderLayout.NORTH);
+    results.add(genrePanel);
+
+    DefaultTableModel publisherModel = new DefaultTableModel(col, 0);   
+
+    JTable publisherTable = new JTable(publisherModel);
+    ArrayList<String[]> publishersFound = Publisher.topByPublisher(); // call backend methods
+    for (String[] row : publishersFound) {
+      Object[] rowAdd = {row[0], row[1]};
+      publisherModel.addRow(rowAdd);
+    }
+    publisherTable.setPreferredSize(new Dimension(300, 500));
+    JPanel publisherPanel = new JPanel (new BorderLayout());
+    publisherPanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
+                                                        "Top Publishers",
+                                                        TitledBorder.CENTER,
+                                                        TitledBorder.TOP));
+    publisherPanel.add(publisherTable, BorderLayout.CENTER);
+    publisherPanel.add(publisherTable.getTableHeader(), BorderLayout.NORTH);
+    results.add(publisherPanel);
 
     // add my account button
     myAcc = new JButton(username);

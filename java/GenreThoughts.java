@@ -171,6 +171,68 @@ public class GenreThoughts {
     return true;
   }
   
+  /**
+   * gets the likes/ does not like preferenece for a game for a user if they have set one does not
+   * matter if user tries to call on pref they have not set, since default is always "does not like"
+   * 
+   * @param genreID
+   * @return
+   */
+  public static Integer getPref(int genreID, String username) {
+    setCurrUserID(username);
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet result = null;
+
+    Integer pref = null;
+
+    try {
+      // Step 1: Create mysql connector class
+      Class.forName("com.mysql.cj.jdbc.Driver");
+
+      // Step 2: Initialize connection object
+      connection = DriverManager.getConnection(Platform.url, Platform.user, Platform.password);
+
+      // Step 3: Initialize statement object
+      statement = connection.createStatement();
+
+      // Create result set and query to retrieve data from
+      String getPref = "SELECT likes FROM project.genre_thoughts WHERE user_id = " + "\"" + user_id
+          + "\" AND genre_id = " + "\"" + genreID + "\";";
+      result = statement.executeQuery(getPref);
+
+      if (result.next()) {
+        pref = result.getInt("likes");
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      // close statement idk why yet but you have to
+      if (statement != null) {
+        try {
+          statement.close();
+        } catch (SQLException sqlE1) {
+          sqlE1.printStackTrace();
+          return null;
+        }
+      }
+
+      // close connection same idk why yet but you have to
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException sqlE2) {
+          sqlE2.printStackTrace();
+          return null;
+        }
+      }
+    }
+    // System.out.println(pref); // test
+    return pref;
+  }
+  
   public static ArrayList<Integer> getLikedGenres(String username) {
     setCurrUserID(username);
     Connection connection = null;
@@ -229,7 +291,7 @@ public class GenreThoughts {
         }
       }
     }
-    System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
+    System.out.println("Successfully added " + resultArray.size() + " genre_ids to Arraylist");
     return resultArray;
   }
   
