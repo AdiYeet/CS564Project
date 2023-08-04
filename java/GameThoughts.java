@@ -303,7 +303,8 @@ public class GameThoughts {
    * @param gameID
    * @return
    */
-  public static Integer getRating(int gameID) {
+  public static Integer getRating(int gameID, String username) {
+    setCurrUserID(username);
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
@@ -364,7 +365,8 @@ public class GameThoughts {
    * @param gameID
    * @return
    */
-  public static Integer getPref(int gameID) {
+  public static Integer getPref(int gameID, String username) {
+    setCurrUserID(username);
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
