@@ -2,6 +2,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -203,14 +204,82 @@ public class Platform {
     return resultArray;
   }
   
+  public static ArrayList<String[]> topByPlatform() {
+    ArrayList<String[]> returnArray = new ArrayList<>();
+
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet result = null;
+
+    try {
+      // Step 1: Create mysql connector class
+      Class.forName("com.mysql.cj.jdbc.Driver");
+
+      // Step 2: Initialize connection object
+      connection = DriverManager.getConnection(Genre.url, Genre.user, Genre.password);
+
+      // Step 3: Initialize statement object
+      statement = connection.createStatement();
+
+      // Create result set and query to retrieve data from
+      String topByGenre = "SELECT p.platform_name, SUM(vg.global_sales) AS total_sales "
+          + "FROM video_games vg " 
+          + "JOIN platform p ON vg.platform_id = p.platform_id " 
+          + "GROUP BY p.platform_name " 
+          + "ORDER BY total_sales DESC";
+
+      result = statement.executeQuery(topByGenre);
+
+      while (result.next()) {
+        String platformName = result.getString("platform_name");
+        double totalSales = result.getDouble("total_sales");
+
+        String[] platformSales = {platformName, String.valueOf(totalSales)};
+        returnArray.add(platformSales);
+      }
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      // close statement idk why yet but you have to
+      if (statement != null) {
+        try {
+          statement.close();
+        } catch (SQLException sqlE1) {
+          sqlE1.printStackTrace();
+          return null;
+        }
+      }
+
+      // close connection same idk why yet but you have to
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException sqlE2) {
+          sqlE2.printStackTrace();
+          return null;
+        }
+      }
+    }
+
+     for (String[] array : returnArray) {
+     System.out.println(Arrays.toString(array));
+     }
+
+    return returnArray;
+  }
+  
   public static void main(String[] args) {
-    getPlatformID("Wii");
-    getPlatformID("X360");
-    getPlatformID("doesntexist"); // shouldnt work
-    getPlatformName(87);
-    getPlatformName(54);
-    getPlatformName(99999); // shouldnt work
-    searchByPlatform("Wii"); // should be 1285
+//    getPlatformID("Wii");
+//    getPlatformID("X360");
+//    getPlatformID("doesntexist"); // shouldnt work
+//    getPlatformName(87);
+//    getPlatformName(54);
+//    getPlatformName(99999); // shouldnt work
+//    searchByPlatform("Wii"); // should be 1285
+    topByPlatform();
   }
 
 }

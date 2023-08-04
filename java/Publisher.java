@@ -2,6 +2,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -204,15 +205,83 @@ public class Publisher {
     return resultArray;
   }
   
+  public static ArrayList<String[]> topByPublisher() {
+    ArrayList<String[]> returnArray = new ArrayList<>();
+
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet result = null;
+
+    try {
+      // Step 1: Create mysql connector class
+      Class.forName("com.mysql.cj.jdbc.Driver");
+
+      // Step 2: Initialize connection object
+      connection = DriverManager.getConnection(Genre.url, Genre.user, Genre.password);
+
+      // Step 3: Initialize statement object
+      statement = connection.createStatement();
+
+      // Create result set and query to retrieve data from
+      String topByGenre = "SELECT p.publisher_name, SUM(vg.global_sales) AS total_sales "
+          + "FROM video_games vg " 
+          + "JOIN publisher p ON vg.publisher_id = p.publisher_id " 
+          + "GROUP BY p.publisher_name " 
+          + "ORDER BY total_sales DESC";
+
+      result = statement.executeQuery(topByGenre);
+
+      while (result.next()) {
+        String publisherName = result.getString("publisher_name");
+        double totalSales = result.getDouble("total_sales");
+
+        String[] publisherSales = {publisherName, String.valueOf(totalSales)};
+        returnArray.add(publisherSales);
+      }
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      // close statement idk why yet but you have to
+      if (statement != null) {
+        try {
+          statement.close();
+        } catch (SQLException sqlE1) {
+          sqlE1.printStackTrace();
+          return null;
+        }
+      }
+
+      // close connection same idk why yet but you have to
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException sqlE2) {
+          sqlE2.printStackTrace();
+          return null;
+        }
+      }
+    }
+
+     for (String[] array : returnArray) {
+     System.out.println(Arrays.toString(array));
+     }
+
+    return returnArray;
+  }
+  
   public static void main(String[] args) {
-    getPublisherID("Nintendo");
-    getPublisherID("Microsoft Game Studios");
-    getPublisherID("doesntexist");
-    getPublisherName(30);
-    getPublisherName(31);
-    getPublisherName(99999);
-    searchByPublisher("Microsoft Game Studios"); //should be 191
-    searchByPublisher("Nintendo"); // should be 695
+//    getPublisherID("Nintendo");
+//    getPublisherID("Microsoft Game Studios");
+//    getPublisherID("doesntexist");
+//    getPublisherName(30);
+//    getPublisherName(31);
+//    getPublisherName(99999);
+//    searchByPublisher("Microsoft Game Studios"); //should be 191
+//    searchByPublisher("Nintendo"); // should be 695
+    topByPublisher();
   }
 
 }

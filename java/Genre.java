@@ -2,6 +2,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -150,9 +151,9 @@ public class Genre {
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
-    
+
     ArrayList<Integer> resultArray = new ArrayList<>();
-    
+
     try {
       // Step 1: Create mysql connector class
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -164,20 +165,20 @@ public class Genre {
       statement = connection.createStatement();
 
       // Create result set and query to retrieve data from
-      String searchbyGenreQuery = "SELECT vg.game_id FROM video_games vg "
-          + "JOIN genre g ON vg.genre_id = g.genre_id " 
-          + "WHERE g.genre_name = " + "\"" + genreName + "\";";
+      String searchbyGenreQuery =
+          "SELECT vg.game_id FROM video_games vg " + "JOIN genre g ON vg.genre_id = g.genre_id "
+              + "WHERE g.genre_name = " + "\"" + genreName + "\";";
       result = statement.executeQuery(searchbyGenreQuery);
-      
+
       while (result.next()) {
         resultArray.add(result.getInt(1));
       }
-      
-//      testing code
-//      for (int i=0; i<10;i++) { // testing if all the correct items got added
-//        System.out.println(resultArray.get(i));
-//      }
-       
+
+      // testing code
+      // for (int i=0; i<10;i++) { // testing if all the correct items got added
+      // System.out.println(resultArray.get(i));
+      // }
+
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -202,19 +203,89 @@ public class Genre {
         }
       }
     }
-    //System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
+    // System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
     return resultArray;
   }
 
+  public static ArrayList<String[]> topByGenre() {
+    ArrayList<String[]> returnArray = new ArrayList<>();
+
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet result = null;
+
+    try {
+      // Step 1: Create mysql connector class
+      Class.forName("com.mysql.cj.jdbc.Driver");
+
+      // Step 2: Initialize connection object
+      connection = DriverManager.getConnection(Genre.url, Genre.user, Genre.password);
+
+      // Step 3: Initialize statement object
+      statement = connection.createStatement();
+
+      // Create result set and query to retrieve data from
+      String topByGenre = "SELECT g.genre_name, SUM(vg.global_sales) AS total_sales "
+          + "FROM video_games vg " 
+          + "JOIN genre g ON vg.genre_id = g.genre_id " 
+          + "GROUP BY g.genre_name " 
+          + "ORDER BY total_sales DESC";
+
+      result = statement.executeQuery(topByGenre);
+
+      while (result.next()) {
+        String genreName = result.getString("genre_name");
+        double totalSales = result.getDouble("total_sales");
+
+        String[] genreSales = {genreName, String.valueOf(totalSales)};
+        returnArray.add(genreSales);
+      }
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      // close statement idk why yet but you have to
+      if (statement != null) {
+        try {
+          statement.close();
+        } catch (SQLException sqlE1) {
+          sqlE1.printStackTrace();
+          return null;
+        }
+      }
+
+      // close connection same idk why yet but you have to
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException sqlE2) {
+          sqlE2.printStackTrace();
+          return null;
+        }
+      }
+    }
+
+//     for (String[] array : returnArray) {
+//     System.out.println(Arrays.toString(array));
+//     }
+
+    return returnArray;
+  }
+
   public static void main(String[] args) {
-    getGenreID("Sports");
-    getGenreID("Platform");
-    getGenreID("doesntexist"); // shouldnt work
-    getGenreName(13910);
-    getGenreName(13908);
-    getGenreName(3); // shouldnt work
-    searchByGenre("Sports"); // should be 2306 
-    searchByGenre("Action"); // should be 3297
+    // getGenreID("Sports");
+    // getGenreID("Platform");
+    // getGenreID("doesntexist"); // shouldnt work
+    // getGenreName(13910);
+    // getGenreName(13908);
+    // getGenreName(3); // shouldnt work
+    // searchByGenre("Sports"); // should be 2306
+    // searchByGenre("Action"); // should be 3297
+
+    topByGenre();
+
   }
 
 }
