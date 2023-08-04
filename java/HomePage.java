@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -28,11 +29,19 @@ public class HomePage extends JFrame {
   private static JButton search;
   private static String username;
   private static JList<String> list;
+  private static JButton homeBtn = new JButton("Back to Home");
 
   void switchAccountPage() {
     // method to switch to account page
     AccountPage accountPage = new AccountPage(username);
     accountPage.show();
+    this.dispose();
+  }
+
+  void switchHomePage() {
+    // method to switch to Home Page
+    HomePage homePage = new HomePage(username);
+    homePage.show();
     this.dispose();
   }
 
@@ -116,6 +125,9 @@ public class HomePage extends JFrame {
     // set results panel
     JPanel results = new JPanel();
 
+    // set bototm panel
+    JPanel bottom = new JPanel();
+
     // add label for our project
     video_games.setFont(new Font("Calibri", Font.BOLD, 25));
     video_games.setPreferredSize(new Dimension(200, 25));
@@ -147,23 +159,143 @@ public class HomePage extends JFrame {
 
           public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 2) {
-              // user is selecting game to know more about essentially
-              String gameChosen = list.getSelectedValue(); // get name of game chosen
+
               results.removeAll(); // remove list of games to replace with info about selected game
-              
-              // get info about game and display
-              JLabel game = new JLabel(gameChosen);
-              game.setPreferredSize(new Dimension(100, 40));
-              results.add(game);
+              results.setLayout(new GridLayout(0, 1));
+
+              String gameChosen = list.getSelectedValue(); // get name of game chosen
+              // get info about game
+              String[] game = VideoGames.returnAllData(VideoGames.getGameID(gameChosen));
+
+              JLabel gameName = new JLabel("Name: " + game[0]);
+              results.add(gameName);
+
+              JLabel platformName = new JLabel("Platform: " + game[1]);
+              results.add(platformName);
+
+              JLabel year = new JLabel("Year released: " + game[2]);
+              results.add(year);
+
+              JLabel gameGenre = new JLabel("Genre: " + game[3]);
+              results.add(gameGenre);
+
+              JLabel publisherName = new JLabel("Publisher: " + game[4]);
+              results.add(publisherName);
+
+              JLabel sales = new JLabel("Global Sales (in millions): " + game[5]);
+              results.add(sales);
+
+              JPanel ratingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+              JLabel ratingLabel = new JLabel("Rating: ");
+              ratingPanel.add(ratingLabel);
+
+              Integer userRating =
+                  GameThoughts.getRating(VideoGames.getGameID(gameChosen), username);
+
+              String finalRating = "-";
+
+              if (userRating == null) {
+                // do nothing
+              } else {
+                finalRating = String.valueOf(userRating);
+              }
+
+              JTextField rating = new JTextField(finalRating, 1);
+              ratingPanel.add(rating);
+
+              JLabel outOf = new JLabel("/5");
+              ratingPanel.add(outOf);
+
+              JButton save = new JButton("Save");
+              save.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                  // save new rating
+                  GameThoughts.setGameRating(VideoGames.getGameID(gameChosen),
+                      Integer.parseInt(rating.getText()), username);
+                  save.setText("Saved!");
+
+                  revalidate();
+                  repaint();
+                }
+
+              });
+              ratingPanel.add(save);
+
+              // add average rating
+              Double avgRating = GameThoughts.getAvgRating(VideoGames.getGameID(gameChosen));
+              JLabel avgLabel = new JLabel("Average Rating: " + Double.toString(avgRating));
+              results.remove(ratingPanel);
+              ratingPanel.remove(avgLabel);
+              ratingPanel.add(avgLabel);
+
+              results.add(ratingPanel);
+
+              // make likes panel with button and number of likes
+              JPanel likesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+              JButton like = new JButton();
+              if (GameThoughts.getPref(VideoGames.getGameID(gameChosen), username) == null
+                  || GameThoughts.getPref(VideoGames.getGameID(gameChosen), username) == 0) {
+                like.setText("Like");
+              } else {
+                like.setText("Unlike");
+              }
+
+              like.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                  if (like.getText().equals("Like")) {
+                    GameThoughts.setGamePref(VideoGames.getGameID(gameChosen), true, username);
+                    like.setText("Unlike");
+                  } else {
+                    GameThoughts.setGamePref(VideoGames.getGameID(gameChosen), false, username);
+                    like.setText("Like");
+                  }
+                }
+
+              });
+
+              likesPanel.add(like);
+
+              Integer number = GameThoughts.numLikes(VideoGames.getGameID(gameChosen));
+
+              if (number == null) {
+                number = 0;
+              }
+
+              JLabel numLikes = new JLabel("Number of Likes: " + Integer.toString(number));
+
+              likesPanel.add(numLikes);
+
+              results.add(likesPanel);
+
               revalidate();
               repaint();
             }
           }
         });
         results.removeAll(); // remove previous results if any before adding new ones
+        results.setLayout(new FlowLayout());
         JScrollPane games = new JScrollPane(list);
         games.setPreferredSize(new Dimension(800, 500));
         results.add(games);
+
+        // switch to home page button add to screen
+        homeBtn.setPreferredSize(new Dimension(180, 25));
+        bottom.add(homeBtn);
+        homeBtn.addActionListener(new ActionListener() {
+
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            switchHomePage();
+          }
+
+        });
+
         revalidate(); // refresh the results
         repaint(); // refresh the results
       }
@@ -186,6 +318,7 @@ public class HomePage extends JFrame {
 
     add(searchBar, BorderLayout.NORTH);
     add(results, BorderLayout.CENTER);
+    add(bottom, BorderLayout.SOUTH);
 
     setVisible(true);
 

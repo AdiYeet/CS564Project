@@ -5,10 +5,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class AccountPage extends JFrame {
 
@@ -16,6 +19,9 @@ public class AccountPage extends JFrame {
   private static JLabel userLabel;
   private static String username;
   private static JButton deleteAcc = new JButton("Delete User");
+  private static JButton homeBtn = new JButton("Back to Home");
+  private static JList<String> gamesList;
+  private static JList<String> genresList;
 
   void switchLoginPage() {
     
@@ -27,6 +33,15 @@ public class AccountPage extends JFrame {
     
   }
 
+  void switchHomePage() {
+    
+    // method to switch to Home Page
+    
+    HomePage homePage = new HomePage(username);
+    homePage.show();
+    this.dispose();
+  }
+  
   public AccountPage(String username) {
 
     this.username = username;
@@ -49,11 +64,43 @@ public class AccountPage extends JFrame {
     JPanel central = new JPanel(new FlowLayout());
     
     // show liked games
+    ArrayList<Integer> gameids = GameThoughts.getLikedGames(username);
+    String[] likedGames = new String[gameids.size()];
+    int index = 0;
+    for (Integer gameID : gameids) {
+      likedGames[index] = VideoGames.returnAllData(gameID)[0];
+      index++;
+    }
+    gamesList = new JList<String>(likedGames);
+    JScrollPane games = new JScrollPane(gamesList);
+    games.setPreferredSize(new Dimension(300, 400));
+    central.add(games);
 
     // show liked genres
+    ArrayList<Integer> genreids = GenreThoughts.getLikedGenres(username);
+    String[] likedGenres = new String[genreids.size()];
+    int index2 = 0;
+    for (Integer genreid : genreids) {
+      likedGenres[index2] = Genre.getGenreName(genreid);
+      index++;
+    }
+    genresList = new JList<String>(likedGenres);
+    JScrollPane genres = new JScrollPane(genresList);
+    genres.setPreferredSize(new Dimension(300, 400));
+    central.add(genres);
 
     // delete user option
     JPanel deletePanel = new JPanel(new FlowLayout());
+    homeBtn.setPreferredSize(new Dimension(180, 25));
+    deletePanel.add(homeBtn);
+    homeBtn.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+       switchHomePage();       
+      }
+      
+    });
     deleteAcc.setPreferredSize(new Dimension(100, 25));
     deletePanel.add(deleteAcc);
     deleteAcc.addActionListener(new ActionListener() {
@@ -74,6 +121,7 @@ public class AccountPage extends JFrame {
 
     add(userPanel, BorderLayout.NORTH);
     add(deletePanel, BorderLayout.SOUTH);
+    add(central, BorderLayout.CENTER);
 
     setVisible(true);
 
