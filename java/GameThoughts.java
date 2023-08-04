@@ -418,6 +418,102 @@ public class GameThoughts {
     return pref;
   }
 
+  public static Double getAvgRating(int gameID) {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet result = null;
+    Double avgRating = null;
+    
+    try {
+      // Step 1: Create mysql connector class
+      Class.forName("com.mysql.cj.jdbc.Driver");
+
+      // Step 2: Initialize connection object
+      connection = DriverManager.getConnection(Platform.url, Platform.user, Platform.password);
+
+      String findAvg = "SELECT AVG(rating) AS avg_rating FROM game_thoughts WHERE game_id = ?";
+      preparedStatement = connection.prepareStatement(findAvg);
+      preparedStatement.setInt(1, gameID);
+      
+      result = preparedStatement.executeQuery();
+      if (result.next()) {
+        avgRating = result.getDouble("avg_rating");
+      } 
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      // close statement idk why yet but you have to
+      if (preparedStatement != null) {
+        try {
+          preparedStatement.close();
+        } catch (SQLException sqlE1) {
+          sqlE1.printStackTrace();
+          return null;
+        }
+      }
+
+      // close connection same idk why yet but you have to
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException sqlE2) {
+          sqlE2.printStackTrace();
+          return null;
+        }
+      }
+    }
+    return avgRating;
+  }
+  
+  public static Integer numLikes(int gameID) {
+    Integer count = null;
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet result = null;
+    
+    try {
+      // Step 1: Create mysql connector class
+      Class.forName("com.mysql.cj.jdbc.Driver");
+
+      // Step 2: Initialize connection object
+      connection = DriverManager.getConnection(Platform.url, Platform.user, Platform.password);
+
+      String numLiked = "SELECT COUNT(DISTINCT user_id) AS num_liked FROM game_thoughts WHERE game_id = ? AND likes = 1";
+      preparedStatement = connection.prepareStatement(numLiked);
+      preparedStatement.setInt(1, gameID);
+      
+      result = preparedStatement.executeQuery();
+      if (result.next()) {
+        count = result.getInt("num_liked");
+      } 
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    } finally {
+      // close statement idk why yet but you have to
+      if (preparedStatement != null) {
+        try {
+          preparedStatement.close();
+        } catch (SQLException sqlE1) {
+          sqlE1.printStackTrace();
+          return null;
+        }
+      }
+
+      // close connection same idk why yet but you have to
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException sqlE2) {
+          sqlE2.printStackTrace();
+          return null;
+        }
+      }
+    }
+    return count;
+  }
+  
   public static ArrayList<Integer> getLikedGames(String username) {
     setCurrUserID(username);
     Connection connection = null;
@@ -481,15 +577,17 @@ public class GameThoughts {
   }
 
   public static void main(String[] args) {
-    setGameRating(2, 4, "tjohnson");
-    setGameRating(3, 4, "tjohnson");
-    setGameRating(4, 4, "tjohnson");
+    //setGameRating(2, 4, "tjohnson");
+    //setGameRating(3, 4, "tjohnson");
+    //setGameRating(4, 4, "tjohnson");
     //setGamePref(2, true, "tjohnson");
     //setGamePref(3, true, "tjohnson");
 
     // getRating(2);
     // getPref(2);
 
-    getLikedGames("tjohnson");
+    //getLikedGames("tjohnson");
+    //System.out.println(getAvgRating(2));
+    //System.out.println(numLikes(2));
   }
 }
