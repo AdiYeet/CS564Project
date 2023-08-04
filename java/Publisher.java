@@ -14,16 +14,16 @@ public class Publisher {
   static final String user = "root";
   static final String password = "sqlPass#7";
 
-  // static Integer publisher_id = null; // Integer wrapper class instead of int so we can have null values
-  // static String publisher_name = null;
-
   public static Integer getPublisherID(String publisherName) {
+
+    // method to get publisher ID
+
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
 
     Integer publisher_id = null;
-    
+
     if (publisherName.trim() == "" || publisherName == null)
       return null;
 
@@ -43,7 +43,8 @@ public class Publisher {
       result = statement.executeQuery(getPublisherIDQuery);
 
       if (result.next()) {
-        publisher_id = Integer.valueOf(result.getString(1)); // convert from resultset to string to integer
+        publisher_id = Integer.valueOf(result.getString(1)); // convert from resultset to string to
+                                                             // integer
       }
 
       if (publisher_id == null) {
@@ -56,7 +57,7 @@ public class Publisher {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -66,7 +67,7 @@ public class Publisher {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -76,17 +77,19 @@ public class Publisher {
         }
       }
     }
-    System.out.println("The publisher_id associated with publisher_name = " + publisherName + " is " + publisher_id);
     return publisher_id;
   }
-  
+
   public static String getPublisherName(Integer publisherID) {
+
+    // method to get publisher name
+
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
 
     String publisher_name = null;
-    
+
     if (publisherID == null)
       return null;
 
@@ -119,7 +122,7 @@ public class Publisher {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -129,7 +132,7 @@ public class Publisher {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -139,17 +142,19 @@ public class Publisher {
         }
       }
     }
-    System.out.println("The publisher_name associated with publisher_id = " + publisherID + " is " + publisher_name);
     return publisher_name;
   }
 
   public static ArrayList<Integer> searchByPublisher(String publisherName) {
+
+    // method to search for all games by publisher
+
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
-    
+
     ArrayList<Integer> resultArray = new ArrayList<>();
-    
+
     try {
       // Step 1: Create mysql connector class
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -162,26 +167,20 @@ public class Publisher {
 
       // Create result set and query to retrieve data from
       String searchbyPublisherQuery = "SELECT vg.game_id FROM video_games vg "
-          + "JOIN publisher pb ON vg.publisher_id = pb.publisher_id " 
-          + "WHERE pb.publisher_name = " + "\"" + publisherName + "\";";
-      
+          + "JOIN publisher pb ON vg.publisher_id = pb.publisher_id " + "WHERE pb.publisher_name = "
+          + "\"" + publisherName + "\";";
+
       result = statement.executeQuery(searchbyPublisherQuery);
-      
+
       while (result.next()) {
         resultArray.add(result.getInt(1));
       }
-      
-//      testing code
-//      for (int i=0; i<10;i++) { // testing if all the correct items got added
-//        System.out.println(resultArray.get(i));
-//      }
-//      System.out.println(resultArray.size()); // 2306 if genre=sports, 3297 if genre=action
-       
+
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -191,7 +190,7 @@ public class Publisher {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -201,11 +200,13 @@ public class Publisher {
         }
       }
     }
-    //System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
     return resultArray;
   }
-  
+
   public static ArrayList<String[]> topByPublisher() {
+
+    // method to get all publishers sorted by aggregate sales
+
     ArrayList<String[]> returnArray = new ArrayList<>();
 
     Connection connection = null;
@@ -224,10 +225,8 @@ public class Publisher {
 
       // Create result set and query to retrieve data from
       String topByGenre = "SELECT p.publisher_name, SUM(vg.global_sales) AS total_sales "
-          + "FROM video_games vg " 
-          + "JOIN publisher p ON vg.publisher_id = p.publisher_id " 
-          + "GROUP BY p.publisher_name " 
-          + "ORDER BY total_sales DESC";
+          + "FROM video_games vg " + "JOIN publisher p ON vg.publisher_id = p.publisher_id "
+          + "GROUP BY p.publisher_name " + "ORDER BY total_sales DESC";
 
       result = statement.executeQuery(topByGenre);
 
@@ -244,7 +243,7 @@ public class Publisher {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -254,7 +253,7 @@ public class Publisher {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -265,24 +264,7 @@ public class Publisher {
       }
     }
 
-     for (String[] array : returnArray) {
-     System.out.println(Arrays.toString(array));
-     }
-
     return returnArray;
   }
-  
-  public static void main(String[] args) {
-//    getPublisherID("Nintendo");
-//    getPublisherID("Microsoft Game Studios");
-//    getPublisherID("doesntexist");
-//    getPublisherName(30);
-//    getPublisherName(31);
-//    getPublisherName(99999);
-//    searchByPublisher("Microsoft Game Studios"); //should be 191
-//    searchByPublisher("Nintendo"); // should be 695
-    topByPublisher();
-  }
-
 }
 

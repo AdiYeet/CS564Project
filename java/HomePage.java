@@ -59,11 +59,12 @@ public class HomePage extends JFrame {
 
     if (searchFor.equals("Game Name")) {
 
-      ArrayList<Integer> resultGames = VideoGames.searchByName(searchVal);
+      ArrayList<Integer> resultGames = VideoGames.searchByName(searchVal); // call backend method to
+                                                                           // query
       String[] gameNames = new String[resultGames.size()];
       int index = 0;
       for (Integer gameID : resultGames) {
-        gameNames[index] = VideoGames.returnAllData(gameID)[0];
+        gameNames[index] = VideoGames.returnAllData(gameID)[0]; // get name of each game
         index++;
       }
 
@@ -71,7 +72,8 @@ public class HomePage extends JFrame {
 
     } else if (searchFor.equals("Genre")) {
 
-      ArrayList<Integer> resultGames = Genre.searchByGenre(searchVal);
+      ArrayList<Integer> resultGames = Genre.searchByGenre(searchVal); // call backend method to
+                                                                       // query
 
       String[] gameNames = new String[resultGames.size()];
       int index = 0;
@@ -85,12 +87,13 @@ public class HomePage extends JFrame {
 
     } else if (searchFor.equals("Platform")) {
 
-      ArrayList<Integer> resultGames = Platform.searchByPlatform(searchVal);
+      ArrayList<Integer> resultGames = Platform.searchByPlatform(searchVal); // call backend method
+                                                                             // to query
 
       String[] gameNames = new String[resultGames.size()];
       int index = 0;
       for (Integer gameID : resultGames) {
-        gameNames[index] = VideoGames.returnAllData(gameID)[0];
+        gameNames[index] = VideoGames.returnAllData(gameID)[0]; // get name of each game
         index++;
       }
 
@@ -101,12 +104,13 @@ public class HomePage extends JFrame {
 
       // Publisher is selected
 
-      ArrayList<Integer> resultGames = Publisher.searchByPublisher(searchVal);
+      ArrayList<Integer> resultGames = Publisher.searchByPublisher(searchVal); // call backend
+                                                                               // method to query
 
       String[] gameNames = new String[resultGames.size()];
       int index = 0;
       for (Integer gameID : resultGames) {
-        gameNames[index] = VideoGames.returnAllData(gameID)[0];
+        gameNames[index] = VideoGames.returnAllData(gameID)[0]; // get name of each game
         index++;
       }
 
@@ -164,6 +168,7 @@ public class HomePage extends JFrame {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addMouseListener(new MouseAdapter() {
 
+          // method to handle user selection and display game data
           public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 2) {
 
@@ -171,6 +176,7 @@ public class HomePage extends JFrame {
               results.setLayout(new GridLayout(0, 1));
 
               String gameChosen = list.getSelectedValue(); // get name of game chosen
+              
               // get info about game
               String[] game = VideoGames.returnAllData(VideoGames.getGameID(gameChosen));
 
@@ -349,16 +355,14 @@ public class HomePage extends JFrame {
       platformModel.addRow(rowAdd);
     }
     platformsTable.setPreferredSize(new Dimension(300, 500));
-    JPanel platformsPanel = new JPanel (new BorderLayout());
-    platformsPanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
-                                                        "Top Platforms",
-                                                        TitledBorder.CENTER,
-                                                        TitledBorder.TOP));
+    JPanel platformsPanel = new JPanel(new BorderLayout());
+    platformsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        "Top Platforms", TitledBorder.CENTER, TitledBorder.TOP));
     platformsPanel.add(platformsTable, BorderLayout.CENTER);
     platformsPanel.add(platformsTable.getTableHeader(), BorderLayout.NORTH);
     results.add(platformsPanel);
 
-    DefaultTableModel genreModel = new DefaultTableModel(col, 0);   
+    DefaultTableModel genreModel = new DefaultTableModel(col, 0);
 
     JTable genreTable = new JTable(genreModel);
     ArrayList<String[]> genresFound = Genre.topByGenre(); // call backend methods
@@ -367,16 +371,14 @@ public class HomePage extends JFrame {
       genreModel.addRow(rowAdd);
     }
     genreTable.setPreferredSize(new Dimension(300, 500));
-    JPanel genrePanel = new JPanel (new BorderLayout());
-    genrePanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
-                                                        "Top Genres",
-                                                        TitledBorder.CENTER,
-                                                        TitledBorder.TOP));
+    JPanel genrePanel = new JPanel(new BorderLayout());
+    genrePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        "Top Genres", TitledBorder.CENTER, TitledBorder.TOP));
     genrePanel.add(genreTable, BorderLayout.CENTER);
     genrePanel.add(genreTable.getTableHeader(), BorderLayout.NORTH);
     results.add(genrePanel);
 
-    DefaultTableModel publisherModel = new DefaultTableModel(col, 0);   
+    DefaultTableModel publisherModel = new DefaultTableModel(col, 0);
 
     JTable publisherTable = new JTable(publisherModel);
     ArrayList<String[]> publishersFound = Publisher.topByPublisher(); // call backend methods
@@ -385,11 +387,9 @@ public class HomePage extends JFrame {
       publisherModel.addRow(rowAdd);
     }
     publisherTable.setPreferredSize(new Dimension(300, 500));
-    JPanel publisherPanel = new JPanel (new BorderLayout());
-    publisherPanel.setBorder (BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
-                                                        "Top Publishers",
-                                                        TitledBorder.CENTER,
-                                                        TitledBorder.TOP));
+    JPanel publisherPanel = new JPanel(new BorderLayout());
+    publisherPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+        "Top Publishers", TitledBorder.CENTER, TitledBorder.TOP));
     publisherPanel.add(publisherTable, BorderLayout.CENTER);
     publisherPanel.add(publisherTable.getTableHeader(), BorderLayout.NORTH);
     results.add(publisherPanel);

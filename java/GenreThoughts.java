@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class GenreThoughts {
   public static int user_id = 0;
-  
+
   public static boolean setCurrUserID(String username) {
     Connection connection = null;
     Statement statement = null;
@@ -26,8 +26,8 @@ public class GenreThoughts {
       statement = connection.createStatement();
 
       // Create result set and query to retrieve data from
-      String query = "SELECT user_id FROM project.users WHERE username = " + "\""
-          + username + "\";";
+      String query =
+          "SELECT user_id FROM project.users WHERE username = " + "\"" + username + "\";";
       result = statement.executeQuery(query);
 
       if (result.next()) {
@@ -38,7 +38,7 @@ public class GenreThoughts {
       e.printStackTrace();
       return false;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -48,7 +48,7 @@ public class GenreThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -60,12 +60,12 @@ public class GenreThoughts {
     }
     return true;
   }
-  
+
   public static boolean setGenrePref(int genreID, boolean likes, String username) {
     setCurrUserID(username);
 
     int val = (likes) ? 1 : 0;
-    
+
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     Statement statement = null;
@@ -84,7 +84,7 @@ public class GenreThoughts {
       String checkUsername = "SELECT EXISTS(SELECT * FROM project.genre_thoughts WHERE user_id = "
           + "\"" + user_id + "\") AS 'check';";
       checkUserIDSet = statement.executeQuery(checkUsername);
-      
+
       if (checkUserIDSet.next()) {
         int count = checkUserIDSet.getInt("check");
         if (count == 0) { // user_id does not already exist in the game_thoughts table
@@ -96,7 +96,7 @@ public class GenreThoughts {
           preparedStatement.setInt(1, genreID);
           preparedStatement.setInt(2, user_id);
           preparedStatement.setInt(3, val);
-          //preparedStatement.setNull(4, java.sql.Types.NULL);
+          // preparedStatement.setNull(4, java.sql.Types.NULL);
 
           int rowsAffected = preparedStatement.executeUpdate();
           if (rowsAffected > 0) {
@@ -104,12 +104,13 @@ public class GenreThoughts {
           } else {
             System.out.println("Failed to add the preference.");
           }
-          
-          
+
+
         } else { // user_id exists in the game_thoughts table
-          
-          String checkGenreID = "SELECT EXISTS(SELECT * FROM project.genre_thoughts WHERE genre_id = "
-              + "\"" + genreID + "\") AS 'check';";
+
+          String checkGenreID =
+              "SELECT EXISTS(SELECT * FROM project.genre_thoughts WHERE genre_id = " + "\""
+                  + genreID + "\") AS 'check';";
           checkGenreIDSet = statement.executeQuery(checkGenreID);
           if (checkGenreIDSet.next()) {
             int countGame = checkGenreIDSet.getInt("check");
@@ -131,14 +132,13 @@ public class GenreThoughts {
                 System.out.println("Failed to add the preference.");
               }
             } else {
-              String updateRating = "UPDATE project.genre_thoughts "
-                  + "SET likes = " + "\"" + val + "\" "
-                  + "WHERE user_id = " + "\"" + user_id + "\" " 
-                  + "AND genre_id = " + "\"" + genreID + "\";";
+              String updateRating = "UPDATE project.genre_thoughts " + "SET likes = " + "\"" + val
+                  + "\" " + "WHERE user_id = " + "\"" + user_id + "\" " + "AND genre_id = " + "\""
+                  + genreID + "\";";
               statement.executeUpdate(updateRating);
             }
           }
-          
+
         }
       }
 
@@ -148,7 +148,7 @@ public class GenreThoughts {
       e.printStackTrace();
       return false;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (preparedStatement != null) {
         try {
           preparedStatement.close();
@@ -158,7 +158,7 @@ public class GenreThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -170,7 +170,7 @@ public class GenreThoughts {
     }
     return true;
   }
-  
+
   /**
    * gets the likes/ does not like preferenece for a game for a user if they have set one does not
    * matter if user tries to call on pref they have not set, since default is always "does not like"
@@ -209,7 +209,7 @@ public class GenreThoughts {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -219,7 +219,7 @@ public class GenreThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -229,10 +229,9 @@ public class GenreThoughts {
         }
       }
     }
-    // System.out.println(pref); // test
     return pref;
   }
-  
+
   public static ArrayList<Integer> getLikedGenres(String username) {
     setCurrUserID(username);
     Connection connection = null;
@@ -261,17 +260,11 @@ public class GenreThoughts {
         resultArray.add(result.getInt("genre_id"));
       }
 
-      // testing code
-      for (int i=0; i<resultArray.size();i++) { // testing if all the correct items got added
-      System.out.println(resultArray.get(i));
-      }
-      // System.out.println(resultArray.size()); // 2306 if genre=sports, 3297 if genre=action
-
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -281,7 +274,7 @@ public class GenreThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -291,16 +284,7 @@ public class GenreThoughts {
         }
       }
     }
-    System.out.println("Successfully added " + resultArray.size() + " genre_ids to Arraylist");
+
     return resultArray;
-  }
-  
-  public static void main(String[] args) {
-    //setGenrePref(16738, true, "tjohnson");
-    //setGenrePref(16772, true, "tjohnson");
-    //setGenrePref(16761, true, "tjohnson");
-    setGenrePref(16729, false, "tjohnson");
-    
-    getLikedGenres("tjohnson");
   }
 }

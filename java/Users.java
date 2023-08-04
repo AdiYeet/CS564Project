@@ -67,7 +67,7 @@ public class Users {
       e.printStackTrace();
       return false;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -77,7 +77,7 @@ public class Users {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -87,7 +87,6 @@ public class Users {
         }
       }
     }
-    System.out.println("User " + username + " successfully added!");
     return true;
   }
 
@@ -134,7 +133,7 @@ public class Users {
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -143,7 +142,7 @@ public class Users {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -152,11 +151,14 @@ public class Users {
         }
       }
     }
-    System.out.println("User " + username + " successfully deleted!");
     return true;
   }
 
+
   public static boolean verifyUser(String username, String password) {
+    
+    // method to verify user credentials
+    
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
@@ -203,7 +205,7 @@ public class Users {
       e.printStackTrace();
       return false;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -213,7 +215,7 @@ public class Users {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -225,106 +227,6 @@ public class Users {
     }
 
     return false;
-  }
-
-  /**
-   * Prints the users table out as a string to verify changes
-   * 
-   * @return
-   */
-  public static String printUsersTable() {
-    Connection connection = null;
-    Statement statement = null;
-    ResultSet result = null;
-
-    String usersString = "";
-    System.out.println("Table Output:");
-    System.out.println("user_id | username | password");
-
-    try {
-      // Step 1: Create mysql connector class
-      Class.forName("com.mysql.cj.jdbc.Driver");
-
-      // Step 2: Initialize connection object
-      connection = DriverManager.getConnection(Users.url, Users.user, Users.password);
-
-      // Step 3: Initialize statement object
-      statement = connection.createStatement();
-
-      // Step 4: Initialize result set
-      result = statement.executeQuery("SELECT * FROM project.users");
-
-      while (result.next()) {
-        usersString += result.getInt("user_id") + "       " + result.getString("username") + " "
-            + result.getString("password") + "\n";
-      }
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    } finally {
-      // close statement idk why yet but you have to
-      if (statement != null) {
-        try {
-          statement.close();
-        } catch (SQLException sqlE1) {
-          sqlE1.printStackTrace();
-        }
-      }
-
-      // close connection same idk why yet but you have to
-      if (connection != null) {
-        try {
-          connection.close();
-        } catch (SQLException sqlE2) {
-          sqlE2.printStackTrace();
-        }
-      }
-    }
-
-    if (usersString == null)
-      return "Table is Empty!"; // if no entries
-    else
-      return usersString; // if there are entries
-  }
-
-  public static void main(String[] args) throws SQLException {
-    // test addUser
-    /*
-    addUser("  ", "  "); // should not work because empty fields
-    System.out.println();
-
-    addUser("avakharia", "goat"); // should not work because password not long enough
-    System.out.println();
-
-    addUser("kshjhun", "testpassword"); // should not work because no digits
-    System.out.println();
-
-    addUser("tjohnson", "working1"); // should work
-    System.out.println();
-
-    addUser("tjohnson", "somepassword1"); // should not work because duplicate username
-    System.out.println();
-
-    addUser("keatonlep", "somepassword2"); // should work
-    System.out.println();
-
-    addUser("nilspalumbo", "somepassword3"); // should work
-    System.out.println();
-
-    System.out.println(printUsersTable()); // should print all users without deleteUser statements
-
-    // test delete user
-    deleteUser("keatonlep"); // should remove keatonlep from database
-    deleteUser("doesntexist"); // THROWS ERROR FINALLY!
-    System.out.println();
-
-    // print table
-    System.out.println(printUsersTable());
-    */
-    
-    verifyUser("tjohnson", "working1"); // should work
-    verifyUser("doesntexist", "doesntexist"); // username does not exist
-    verifyUser("tjohnson", "doesnt match"); // password does not match
   }
 
 }

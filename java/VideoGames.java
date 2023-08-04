@@ -92,18 +92,12 @@ public class VideoGames {
       while (result.next()) {
         resultArray.add(result.getInt(1));
       }
-
-      // testing code
-      // for (int i=0; i<10;i++) { // testing if all the correct items got added
-      // System.out.println(resultArray.get(i));
-      // }
-      // System.out.println(resultArray.size()); // 2306 if genre=sports, 3297 if genre=action
-
+      
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -113,7 +107,7 @@ public class VideoGames {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -123,7 +117,6 @@ public class VideoGames {
         }
       }
     }
-    // System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
     return resultArray;
   }
 
@@ -174,7 +167,7 @@ public class VideoGames {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -184,7 +177,7 @@ public class VideoGames {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -194,8 +187,6 @@ public class VideoGames {
         }
       }
     }
-    // System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
-   // System.out.println(Arrays.toString(resultArray));
     return resultArray;
   }
 
@@ -210,20 +201,5 @@ public class VideoGames {
       listOfGameArrays.add(returnAllData(gameIDList.get(i)));
     }
     return listOfGameArrays;
-  }
-
-  /**
-   * 
-   * @param args
-   */
-  public static void main(String[] args) {
-    //searchByName("Lego"); // should be 155
-    //searchByName("Wii Sports"); // should be 3
-    //System.out.println();
-    //returnAllData(1); // should give all details about Wii Sports
-    //returnAllData(56); // should give all details about MW2
-    //System.out.println();
-    //listToAllData(searchByName("Wii Sports"));
-    //System.out.println(getGameID("Grand Theft Auto III"));
   }
 }

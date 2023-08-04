@@ -14,6 +14,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+/**
+ * My Account Page
+ */
 public class AccountPage extends JFrame {
 
   // field declarations
@@ -46,7 +49,7 @@ public class AccountPage extends JFrame {
   
   public AccountPage(String username) {
 
-    this.username = username;
+    this.username = username; // set current username
 
     // frame setup
     setTitle("My Account");
@@ -80,7 +83,6 @@ public class AccountPage extends JFrame {
     JScrollPane games = new JScrollPane(gamesList);
     games.setPreferredSize(new Dimension(300, 400));
     central.add(games);
-    
     central.add(new JLabel(""));
 
     // show liked genres
@@ -97,11 +99,10 @@ public class AccountPage extends JFrame {
     genresList = new JList<String>(likedGenres);
     JScrollPane genres = new JScrollPane(genresList);
     genres.setPreferredSize(new Dimension(300, 400));
-    central.add(genres);
-    
+    central.add(genres);  
     central.add(new JLabel(""));
 
-    // delete user option
+    // delete user, back to home and log out buttons
     JPanel deletePanel = new JPanel(new FlowLayout());
     homeBtn.setPreferredSize(new Dimension(180, 25));
     deletePanel.add(homeBtn);
@@ -109,7 +110,7 @@ public class AccountPage extends JFrame {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-       switchHomePage();       
+       switchHomePage();
       }
       
     });
@@ -140,6 +141,7 @@ public class AccountPage extends JFrame {
     });
 
 
+    // add everything to the frame
     add(userPanel, BorderLayout.NORTH);
     add(deletePanel, BorderLayout.SOUTH);
     add(central, BorderLayout.CENTER);

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class GameThoughts {
 
-  public static int user_id = 0; // initialize to avoid mistakes
+  public static int user_id = 0; // initialize
 
   /**
    * sets current user id from current username in HomePage.java
@@ -44,7 +44,7 @@ public class GameThoughts {
       e.printStackTrace();
       return false;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -54,7 +54,7 @@ public class GameThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -156,7 +156,7 @@ public class GameThoughts {
       e.printStackTrace();
       return false;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (preparedStatement != null) {
         try {
           preparedStatement.close();
@@ -166,7 +166,7 @@ public class GameThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -272,7 +272,7 @@ public class GameThoughts {
       e.printStackTrace();
       return false;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (preparedStatement != null) {
         try {
           preparedStatement.close();
@@ -282,7 +282,7 @@ public class GameThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -334,7 +334,7 @@ public class GameThoughts {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -344,7 +344,7 @@ public class GameThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -354,7 +354,6 @@ public class GameThoughts {
         }
       }
     }
-    // System.out.println(rating); // test
     return rating;
   }
 
@@ -396,7 +395,7 @@ public class GameThoughts {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -406,7 +405,7 @@ public class GameThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -416,7 +415,6 @@ public class GameThoughts {
         }
       }
     }
-    // System.out.println(pref); // test
     return pref;
   }
 
@@ -445,7 +443,7 @@ public class GameThoughts {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (preparedStatement != null) {
         try {
           preparedStatement.close();
@@ -455,7 +453,7 @@ public class GameThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -493,7 +491,7 @@ public class GameThoughts {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (preparedStatement != null) {
         try {
           preparedStatement.close();
@@ -503,7 +501,7 @@ public class GameThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -543,18 +541,12 @@ public class GameThoughts {
       while (result.next()) {
         resultArray.add(result.getInt("game_id"));
       }
-
-      // testing code
-      // for (int i=0; i<resultArray.size();i++) { // testing if all the correct items got added
-      // System.out.println(resultArray.get(i));
-      // }
-      // System.out.println(resultArray.size()); // 2306 if genre=sports, 3297 if genre=action
-
+      
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -564,7 +556,7 @@ public class GameThoughts {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -574,22 +566,7 @@ public class GameThoughts {
         }
       }
     }
-    System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
+
     return resultArray;
-  }
-
-  public static void main(String[] args) {
-    //setGameRating(2, 4, "tjohnson");
-    //setGameRating(3, 4, "tjohnson");
-    //setGameRating(4, 4, "tjohnson");
-    //setGamePref(2, true, "tjohnson");
-    //setGamePref(3, true, "tjohnson");
-
-    // getRating(2);
-    // getPref(2);
-
-    //getLikedGames("tjohnson");
-    //System.out.println(getAvgRating(2));
-    //System.out.println(numLikes(2));
   }
 }

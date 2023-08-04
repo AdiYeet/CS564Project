@@ -14,10 +14,6 @@ public class Genre {
   static final String user = "root";
   static final String password = "sqlPass#7";
 
-  // static Integer genre_id = null; // Integer wrapper class instead of int so we can have null
-  // values
-  // static String genre_name = null;
-
   public static Integer getGenreID(String genreName) {
     Connection connection = null;
     Statement statement = null;
@@ -58,7 +54,7 @@ public class Genre {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -68,7 +64,7 @@ public class Genre {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -78,8 +74,6 @@ public class Genre {
         }
       }
     }
-    System.out
-        .println("The genre_id associated with genre_name = " + genreName + " is " + genre_id);
     return genre_id;
   }
 
@@ -122,7 +116,7 @@ public class Genre {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -132,7 +126,7 @@ public class Genre {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -142,8 +136,6 @@ public class Genre {
         }
       }
     }
-    System.out
-        .println("The genre_name associated with genre_id = " + genreID + " is " + genre_name);
     return genre_name;
   }
 
@@ -174,16 +166,11 @@ public class Genre {
         resultArray.add(result.getInt(1));
       }
 
-      // testing code
-      // for (int i=0; i<10;i++) { // testing if all the correct items got added
-      // System.out.println(resultArray.get(i));
-      // }
-
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -193,7 +180,7 @@ public class Genre {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -203,7 +190,6 @@ public class Genre {
         }
       }
     }
-    // System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
     return resultArray;
   }
 
@@ -246,7 +232,7 @@ public class Genre {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -256,7 +242,7 @@ public class Genre {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -267,25 +253,7 @@ public class Genre {
       }
     }
 
-//     for (String[] array : returnArray) {
-//     System.out.println(Arrays.toString(array));
-//     }
-
     return returnArray;
-  }
-
-  public static void main(String[] args) {
-    // getGenreID("Sports");
-    // getGenreID("Platform");
-    // getGenreID("doesntexist"); // shouldnt work
-    // getGenreName(13910);
-    // getGenreName(13908);
-    // getGenreName(3); // shouldnt work
-    // searchByGenre("Sports"); // should be 2306
-    // searchByGenre("Action"); // should be 3297
-
-    topByGenre();
-
   }
 
 }

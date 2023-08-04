@@ -13,7 +13,6 @@ import javax.swing.JTextField;
 
 /**
  * LoginPage
- *
  */
 public class LoginPage extends JFrame {
 

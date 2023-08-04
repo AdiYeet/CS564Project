@@ -17,16 +17,13 @@ public class Platform {
   static final String user = "root";
   static final String password = "sqlPass#7";
 
-  //static Integer platform_id = null; // Integer wrapper class instead of int so we can have null values
-  //static String platform_name = null;
-
   public static Integer getPlatformID(String platformName) {
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
 
     Integer platform_id = null;
-    
+
     if (platformName.trim() == "" || platformName == null)
       return null;
 
@@ -46,7 +43,8 @@ public class Platform {
       result = statement.executeQuery(getPlatformIDQuery);
 
       if (result.next()) {
-        platform_id = Integer.valueOf(result.getString(1)); // convert from resultset to string to integer
+        platform_id = Integer.valueOf(result.getString(1)); // convert from resultset to string to
+                                                            // integer
       }
 
       if (platform_id == null) {
@@ -59,7 +57,7 @@ public class Platform {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -69,7 +67,7 @@ public class Platform {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -79,17 +77,16 @@ public class Platform {
         }
       }
     }
-    System.out.println("The platform_id associated with platform_name = " + platformName + " is " + platform_id);
     return platform_id;
   }
-  
+
   public static String getPlatformName(Integer platformID) {
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
 
     String platform_name = null;
-    
+
     if (platformID == null)
       return null;
 
@@ -122,7 +119,7 @@ public class Platform {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -132,7 +129,7 @@ public class Platform {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -142,7 +139,6 @@ public class Platform {
         }
       }
     }
-    System.out.println("The genre_name associated with genre_id = " + platformID + " is " + platform_name);
     return platform_name;
   }
 
@@ -150,9 +146,9 @@ public class Platform {
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
-    
+
     ArrayList<Integer> resultArray = new ArrayList<>();
-    
+
     try {
       // Step 1: Create mysql connector class
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -165,25 +161,19 @@ public class Platform {
 
       // Create result set and query to retrieve data from
       String searchbyPlatformQuery = "SELECT vg.game_id FROM video_games vg "
-          + "JOIN platform p ON vg.platform_id = p.platform_id " 
-          + "WHERE p.platform_name = " + "\"" + platformName + "\";";
+          + "JOIN platform p ON vg.platform_id = p.platform_id " + "WHERE p.platform_name = " + "\""
+          + platformName + "\";";
       result = statement.executeQuery(searchbyPlatformQuery);
-      
+
       while (result.next()) {
         resultArray.add(result.getInt(1));
       }
-      
-//      testing code
-//      for (int i=0; i<10;i++) { // testing if all the correct items got added
-//        System.out.println(resultArray.get(i));
-//      }
-//      System.out.println(resultArray.size()); // 2306 if genre=sports, 3297 if genre=action
-       
+
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -193,7 +183,7 @@ public class Platform {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -203,10 +193,9 @@ public class Platform {
         }
       }
     }
-    //System.out.println("Successfully added " + resultArray.size() + " game_ids to Arraylist");
     return resultArray;
   }
-  
+
   public static ArrayList<String[]> topByPlatform() {
     ArrayList<String[]> returnArray = new ArrayList<>();
 
@@ -226,10 +215,8 @@ public class Platform {
 
       // Create result set and query to retrieve data from
       String topByGenre = "SELECT p.platform_name, SUM(vg.global_sales) AS total_sales "
-          + "FROM video_games vg " 
-          + "JOIN platform p ON vg.platform_id = p.platform_id " 
-          + "GROUP BY p.platform_name " 
-          + "ORDER BY total_sales DESC";
+          + "FROM video_games vg " + "JOIN platform p ON vg.platform_id = p.platform_id "
+          + "GROUP BY p.platform_name " + "ORDER BY total_sales DESC";
 
       result = statement.executeQuery(topByGenre);
 
@@ -246,7 +233,7 @@ public class Platform {
       e.printStackTrace();
       return null;
     } finally {
-      // close statement idk why yet but you have to
+      // close resources
       if (statement != null) {
         try {
           statement.close();
@@ -256,7 +243,7 @@ public class Platform {
         }
       }
 
-      // close connection same idk why yet but you have to
+      // close connection
       if (connection != null) {
         try {
           connection.close();
@@ -267,25 +254,7 @@ public class Platform {
       }
     }
 
-     for (String[] array : returnArray) {
-     System.out.println(Arrays.toString(array));
-     }
-
     return returnArray;
   }
-  
-  public static void main(String[] args) {
-//    getPlatformID("Wii");
-//    getPlatformID("X360");
-//    getPlatformID("doesntexist"); // shouldnt work
-//    getPlatformName(87);
-//    getPlatformName(54);
-//    getPlatformName(99999); // shouldnt work
-//    searchByPlatform("Wii"); // should be 1285
-    topByPlatform();
-  }
-  
-
-
 }
 
