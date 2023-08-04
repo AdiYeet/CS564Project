@@ -1,3 +1,6 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -8,6 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+/**
+ * LoginPage
+ *
+ */
 public class LoginPage extends JFrame {
 
   // field declarations
@@ -68,45 +75,47 @@ public class LoginPage extends JFrame {
 
   public LoginPage() {
     
-    setTitle("Video Games App"); // set title of app
+    setTitle("Login Page"); // set title of app
 
-    // setup panel and frame
-    JPanel panel = new JPanel();
+    // setup final frame
     setSize(800, 500);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    add(panel);
-
-    panel.setLayout(null);
+    setLayout(new BorderLayout());
+    
+    // set central panel 
+    JPanel central = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    central.setPreferredSize(new Dimension(270, 200));
 
     // setup username and password fields
     userLabel = new JLabel("Username");
-    userLabel.setBounds(10, 20, 80, 25);
-    panel.add(userLabel);
+    userLabel.setPreferredSize(new Dimension(80,25));
+    central.add(userLabel);
 
     userText = new JTextField();
-    userText.setBounds(100, 20, 165, 25);
-    panel.add(userText);
+    userText.setPreferredSize(new Dimension(165, 25));
+    central.add(userText);
 
     passwordLabel = new JLabel("Password");
-    passwordLabel.setBounds(10, 50, 80, 25);
-    panel.add(passwordLabel);
+    passwordLabel.setPreferredSize(new Dimension(80, 25));
+    central.add(passwordLabel);
 
     passwordText = new JPasswordField();
-    passwordText.setBounds(100, 50, 165, 25);
-    panel.add(passwordText);
+    passwordText.setPreferredSize(new Dimension(165, 25));
+    central.add(passwordText);
 
     // setup login and signup buttons
     loginButton = new JButton("Login");
-    loginButton.setBounds(10, 80, 80, 25);
-    panel.add(loginButton);
+    loginButton.setPreferredSize(new Dimension(80, 25));
+    central.add(loginButton);
 
     signUpButton = new JButton("Sign Up");
-    signUpButton.setBounds(90, 80, 80, 25);
-    panel.add(signUpButton);
+    signUpButton.setPreferredSize(new Dimension(80, 25));
+    central.add(signUpButton);
 
     // setup text for login/sign up status
     status = new JLabel("");
-    status.setBounds(10, 110, 500, 25);
+    status.setPreferredSize(new Dimension(500, 25));
+    central.add(status);
     
     loginButton.addActionListener(new ActionListener() {
 
@@ -122,7 +131,7 @@ public class LoginPage extends JFrame {
         addUser();
       }}); // call backend methods to add user
     
-    panel.add(status);
+    add(central, BorderLayout.CENTER);
 
     setVisible(true);
 

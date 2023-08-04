@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,10 +27,9 @@ public class HomePage extends JFrame {
   private static JTextField searchField;
   private static JButton search;
   private static String username;
-  private static JList list;
+  private static JList<String> list;
 
-
-  void myAccPage() {
+  void switchAccountPage() {
     // method to switch to account page
     AccountPage accountPage = new AccountPage(username);
     accountPage.show();
@@ -59,7 +60,7 @@ public class HomePage extends JFrame {
       String[] gameNames = new String[resultGames.size()];
       int index = 0;
       for (Integer gameID : resultGames) {
-        gameNames[index] = VideoGames.returnAllData(gameID)[0];
+        gameNames[index] = VideoGames.returnAllData(gameID)[0]; // get name of each game
         index++;
       }
 
@@ -81,7 +82,7 @@ public class HomePage extends JFrame {
 
 
     } else {
-      
+
       // Publisher is selected
 
       ArrayList<Integer> resultGames = Publisher.searchByPublisher(searchVal);
@@ -103,8 +104,8 @@ public class HomePage extends JFrame {
 
     this.username = username;
 
-    //frame setup
-    setTitle("Video Games App"); // set title of app
+    // frame setup
+    setTitle("Home Page"); // set title of app
     setSize(1000, 700);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
@@ -139,10 +140,27 @@ public class HomePage extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
         String[] gamesFound = search(); // call backend methods to search
-        list = new JList(gamesFound);
+        list = new JList<String>(gamesFound);
         list.setVisibleRowCount(15);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        results.removeAll();
+        list.addMouseListener(new MouseAdapter() {
+
+          public void mouseClicked(MouseEvent e) {
+            if (e.getClickCount() == 2) {
+              // user is selecting game to know more about essentially
+              String gameChosen = list.getSelectedValue(); // get name of game chosen
+              results.removeAll(); // remove list of games to replace with info about selected game
+              
+              // get info about game and display
+              JLabel game = new JLabel(gameChosen);
+              game.setPreferredSize(new Dimension(100, 40));
+              results.add(game);
+              revalidate();
+              repaint();
+            }
+          }
+        });
+        results.removeAll(); // remove previous results if any before adding new ones
         JScrollPane games = new JScrollPane(list);
         games.setPreferredSize(new Dimension(800, 500));
         results.add(games);
@@ -161,7 +179,7 @@ public class HomePage extends JFrame {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        myAccPage(); // call method to switch pages
+        switchAccountPage(); // call method to switch pages
       }
 
     });
