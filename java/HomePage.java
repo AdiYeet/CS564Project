@@ -25,6 +25,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import java.lang.Math;
 
 public class HomePage extends JFrame {
 
@@ -333,9 +334,10 @@ public class HomePage extends JFrame {
 
               // add average rating
               Double avgRating = GameThoughts.getAvgRating(VideoGames.getGameID(gameChosen));
-              JLabel avg = new JLabel(Double.toString(avgRating));
+              String avgString = String.format("%.2f", avgRating.doubleValue());
+              JLabel avg = new JLabel(avgString);
               avg.setFont(new Font("SansSerif", Font.PLAIN, 20));
-              avg.setBounds(584, 439, 33, 31);
+              avg.setBounds(584, 439, 103, 31);
               results.remove(avg);
               results.add(avg);
 

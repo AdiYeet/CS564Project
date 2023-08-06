@@ -37,7 +37,7 @@ public class LoginPage extends JFrame{
       // verifies user and sets status text
       status.setText("Login successful!");
       HomePage home = new HomePage(user);
-      this.dispose();
+      frame.dispose();
       home.setVisible(true);
     } else {
       status.setText("Login failed!");
@@ -59,7 +59,7 @@ void addUser() {
         // adds user and sets status text
         status.setText("Sign up successful!");
         HomePage home = new HomePage(user);
-        this.dispose();
+        frame.dispose();
         home.setVisible(true);
       } else {
         status.setText("Sign up unsuccessful! Please check console for error.");
@@ -75,16 +75,8 @@ void addUser() {
    * Create the application.
    */
   public LoginPage() {
-    initialize();
-  }
-
-  /**
-   * Initialize the contents of the frame.
-   */
-  private void initialize() {
-    
-    // set the frame
-    setTitle("Login Page");
+ // set the frame
+    setTitle("Error Page");
     frame = new JFrame();
     frame.getContentPane().setBackground(Color.WHITE);
     frame.getContentPane().setLayout(null);

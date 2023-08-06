@@ -36,12 +36,9 @@ public class AccountPage extends JFrame {
   private static JList genresList;
 
   void switchLoginPage() {
-
     // method to switch to Login Page
-
-    LoginPage loginPage = new LoginPage();
+    Main.main(null);
     this.dispose();
-    loginPage.setVisible(true);
   }
 
   void switchHomePage() {
@@ -60,7 +57,7 @@ public class AccountPage extends JFrame {
   public AccountPage(String username) {
     this.username = username;
 
-    //create frame and panel
+    // create frame and panel
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 1000, 700);
     contentPane = new JPanel();
@@ -104,7 +101,7 @@ public class AccountPage extends JFrame {
     JLabel genreLabel = new JLabel("Liked Genres");
     genreLabel.setFont(new Font("SansSerif", Font.PLAIN, 15));
     genreLabel.setBounds(679, 168, 101, 16);
-    contentPane.add(genreLabel);   
+    contentPane.add(genreLabel);
 
     // get liked games and display on scrollpane
     ArrayList<Integer> gameids = GameThoughts.getLikedGames(username);
@@ -114,7 +111,7 @@ public class AccountPage extends JFrame {
       likedGames[index1] = VideoGames.returnAllData(gameID)[0];
       index1++;
     }
-    
+
     JScrollPane gamesScrollPane = new JScrollPane();
     gamesScrollPane.setViewportBorder(null);
     gamesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -125,7 +122,7 @@ public class AccountPage extends JFrame {
     gamesList.setBackground(SystemColor.window);
     DefaultListCellRenderer renderer = (DefaultListCellRenderer) gamesList.getCellRenderer();
     renderer.setHorizontalAlignment(SwingConstants.CENTER);
-    
+
     // get liked genres and show on scrollpane
     ArrayList<Integer> genreids = GenreThoughts.getLikedGenres(username);
     String[] likedGenres = new String[genreids.size()];
@@ -138,13 +135,13 @@ public class AccountPage extends JFrame {
     genreScrollPane.setViewportBorder(null);
     genreScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     genreScrollPane.setBounds(523, 200, 420, 332);
-    contentPane.add(genreScrollPane);   
+    contentPane.add(genreScrollPane);
     genresList = new JList(likedGenres);
     genreScrollPane.setViewportView(genresList);
     genresList.setBackground(SystemColor.window);
     renderer = (DefaultListCellRenderer) genresList.getCellRenderer();
     renderer.setHorizontalAlignment(SwingConstants.CENTER);
-    
+
     // add home button
     homeBtn = new JButton("Back to Home");
     homeBtn.setBounds(41, 577, 147, 41);
@@ -153,9 +150,9 @@ public class AccountPage extends JFrame {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-       switchHomePage();
+        switchHomePage();
       }
-      
+
     });
 
     // add logout button
