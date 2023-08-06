@@ -110,7 +110,7 @@ public class GenreThoughts {
 
           String checkGenreID =
               "SELECT EXISTS(SELECT * FROM project.genre_thoughts WHERE genre_id = " + "\""
-                  + genreID + "\") AS 'check';";
+                  + genreID + "\" AND user_id = " + "\"" + user_id + "\") AS 'check';";
           checkGenreIDSet = statement.executeQuery(checkGenreID);
           if (checkGenreIDSet.next()) {
             int countGame = checkGenreIDSet.getInt("check");
@@ -286,5 +286,9 @@ public class GenreThoughts {
     }
 
     return resultArray;
+  }
+  
+  public static void main(String[] args) {
+    setGenrePref(13942, true, "tjohnson");
   }
 }

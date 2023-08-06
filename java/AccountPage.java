@@ -1,111 +1,154 @@
-import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.GridLayout;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.JList;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
-/**
- * My Account Page
- */
+@SuppressWarnings({"serial", "unused"})
 public class AccountPage extends JFrame {
 
   // field declarations
+  private JPanel contentPane;
   private static JLabel userLabel;
   private static String username;
   private static JButton deleteAcc = new JButton("Delete User");
   private static JButton homeBtn = new JButton("Back to Home");
   private static JButton logOut = new JButton("Log Out");
-  private static JList<String> gamesList;
-  private static JList<String> genresList;
+  @SuppressWarnings("rawtypes")
+  private static JList gamesList;
+  @SuppressWarnings("rawtypes")
+  private static JList genresList;
 
   void switchLoginPage() {
-    
+
     // method to switch to Login Page
-    
+
     LoginPage loginPage = new LoginPage();
-    loginPage.show();
     this.dispose();
-    
+    loginPage.setVisible(true);
   }
 
   void switchHomePage() {
-    
+
     // method to switch to Home Page
-    
+
     HomePage homePage = new HomePage(username);
-    homePage.show();
     this.dispose();
+    homePage.setVisible(true);
   }
-  
+
+  /**
+   * Create the frame.
+   */
+  @SuppressWarnings({"static-access", "unchecked", "rawtypes"})
   public AccountPage(String username) {
+    this.username = username;
 
-    this.username = username; // set current username
-
-    // frame setup
-    setTitle("My Account");
-    setSize(1000, 700);
+    //create frame and panel
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLayout(new BorderLayout());
+    setBounds(100, 100, 1000, 700);
+    contentPane = new JPanel();
+    contentPane.setBackground(Color.WHITE);
+    contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-    // show current user
-    JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    setContentPane(contentPane);
+    contentPane.setLayout(null);
 
-    userLabel = new JLabel("Username: " + username);
-    userLabel.setFont(new Font("Calibri", Font.BOLD, 30));
-    userLabel.setPreferredSize(new Dimension(400, 80));
-    userPanel.add(userLabel);
+    // add my account label
+    JLabel myAccountLabel = new JLabel("My Account");
+    myAccountLabel.setFont(new Font("SansSerif", Font.BOLD, 27));
+    myAccountLabel.setBounds(41, 30, 162, 27);
+    contentPane.add(myAccountLabel);
 
-    // create central panel
-    JPanel central = new JPanel(new GridLayout(0,3));
-    
-    // show liked games
-    JLabel gameLabel = new JLabel("    Liked Games");
-    gameLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
-    central.add(gameLabel);
+    // frontend design element
+    JSeparator separator = new JSeparator();
+    separator.setForeground(Color.BLACK);
+    separator.setBounds(41, 62, 918, 12);
+    contentPane.add(separator);
+
+    // create hello label
+    JLabel helloLabel = new JLabel("Hello,");
+    helloLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+    helloLabel.setBounds(51, 95, 61, 16);
+    contentPane.add(helloLabel);
+
+    // create user label
+    userLabel = new JLabel(username);
+    userLabel.setFont(new Font("SansSerif", Font.BOLD | Font.ITALIC, 18));
+    userLabel.setBounds(109, 86, 199, 34);
+    contentPane.add(userLabel);
+
+    // create liked games label
+    JLabel gameLabel = new JLabel("Liked Games");
+    gameLabel.setFont(new Font("SansSerif", Font.PLAIN, 15));
+    gameLabel.setBounds(214, 168, 101, 16);
+    contentPane.add(gameLabel);
+
+    // create liked genres label
+    JLabel genreLabel = new JLabel("Liked Genres");
+    genreLabel.setFont(new Font("SansSerif", Font.PLAIN, 15));
+    genreLabel.setBounds(679, 168, 101, 16);
+    contentPane.add(genreLabel);   
+
+    // get liked games and display on scrollpane
     ArrayList<Integer> gameids = GameThoughts.getLikedGames(username);
     String[] likedGames = new String[gameids.size()];
-    int index = 0;
+    int index1 = 0;
     for (Integer gameID : gameids) {
-      likedGames[index] = VideoGames.returnAllData(gameID)[0];
-      index++;
+      likedGames[index1] = VideoGames.returnAllData(gameID)[0];
+      index1++;
     }
-    gamesList = new JList<String>(likedGames);
-    JScrollPane games = new JScrollPane(gamesList);
-    games.setPreferredSize(new Dimension(300, 400));
-    central.add(games);
-    central.add(new JLabel(""));
-
-    // show liked genres
-    JLabel genreLabel = new JLabel("    Liked Genres");
-    genreLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
-    central.add(genreLabel);
+    
+    JScrollPane gamesScrollPane = new JScrollPane();
+    gamesScrollPane.setViewportBorder(null);
+    gamesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    gamesScrollPane.setBounds(51, 200, 420, 332);
+    contentPane.add(gamesScrollPane);
+    gamesList = new JList(likedGames);
+    gamesScrollPane.setViewportView(gamesList);
+    gamesList.setBackground(SystemColor.window);
+    DefaultListCellRenderer renderer = (DefaultListCellRenderer) gamesList.getCellRenderer();
+    renderer.setHorizontalAlignment(SwingConstants.CENTER);
+    
+    // get liked genres and show on scrollpane
     ArrayList<Integer> genreids = GenreThoughts.getLikedGenres(username);
     String[] likedGenres = new String[genreids.size()];
     int index2 = 0;
     for (Integer genreid : genreids) {
       likedGenres[index2] = Genre.getGenreName(genreid);
-      index++;
+      index2++;
     }
-    genresList = new JList<String>(likedGenres);
-    JScrollPane genres = new JScrollPane(genresList);
-    genres.setPreferredSize(new Dimension(300, 400));
-    central.add(genres);  
-    central.add(new JLabel(""));
-
-    // delete user, back to home and log out buttons
-    JPanel deletePanel = new JPanel(new FlowLayout());
-    homeBtn.setPreferredSize(new Dimension(180, 25));
-    deletePanel.add(homeBtn);
+    JScrollPane genreScrollPane = new JScrollPane();
+    genreScrollPane.setViewportBorder(null);
+    genreScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    genreScrollPane.setBounds(523, 200, 420, 332);
+    contentPane.add(genreScrollPane);   
+    genresList = new JList(likedGenres);
+    genreScrollPane.setViewportView(genresList);
+    genresList.setBackground(SystemColor.window);
+    renderer = (DefaultListCellRenderer) genresList.getCellRenderer();
+    renderer.setHorizontalAlignment(SwingConstants.CENTER);
+    
+    // add home button
+    homeBtn = new JButton("Back to Home");
+    homeBtn.setBounds(41, 577, 147, 41);
+    contentPane.add(homeBtn);
     homeBtn.addActionListener(new ActionListener() {
 
       @Override
@@ -114,8 +157,22 @@ public class AccountPage extends JFrame {
       }
       
     });
-    deleteAcc.setPreferredSize(new Dimension(100, 25));
-    deletePanel.add(deleteAcc);
+
+    // add logout button
+    logOut = new JButton("Log Out");
+    logOut.setBounds(426, 577, 147, 41);
+    contentPane.add(logOut);
+    logOut.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        switchLoginPage();
+      }
+    });
+
+    // add delete account button
+    deleteAcc = new JButton("Delete User");
+    deleteAcc.setBounds(807, 577, 147, 41);
+    contentPane.add(deleteAcc);
     deleteAcc.addActionListener(new ActionListener() {
 
       @Override
@@ -130,24 +187,7 @@ public class AccountPage extends JFrame {
       }
 
     });
-    
-    logOut.setPreferredSize(new Dimension(100, 25));
-    deletePanel.add(logOut);
-    logOut.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        switchLoginPage();
-      }
-    });
 
-
-    // add everything to the frame
-    add(userPanel, BorderLayout.NORTH);
-    add(deletePanel, BorderLayout.SOUTH);
-    add(central, BorderLayout.CENTER);
-
-    setVisible(true);
-
+    contentPane.setVisible(true);
   }
-
 }

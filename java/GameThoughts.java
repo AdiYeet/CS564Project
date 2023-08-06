@@ -119,7 +119,7 @@ public class GameThoughts {
 
         } else { // user_id exists in the game_thoughts table
           String checkGameID = "SELECT EXISTS(SELECT * FROM project.game_thoughts WHERE game_id = "
-              + "\"" + gameID + "\") AS 'check';";
+              + "\"" + gameID + "\" AND user_id = " + "\"" + user_id + "\") AS 'check';";
           checkGameIDSet = statement.executeQuery(checkGameID);
           if (checkGameIDSet.next()) {
             int countGame = checkGameIDSet.getInt("check");
@@ -234,7 +234,7 @@ public class GameThoughts {
 
         } else { // user_id exists in the game_thoughts table
           String checkGameID = "SELECT EXISTS(SELECT * FROM project.game_thoughts WHERE game_id = "
-              + "\"" + gameID + "\") AS 'check';";
+              + "\"" + gameID + "\" AND user_id = " +  "\"" + user_id + "\") AS 'check';";
           checkGameIDSet = statement.executeQuery(checkGameID);
           if (checkGameIDSet.next()) {
             int countGame = checkGameIDSet.getInt("check");

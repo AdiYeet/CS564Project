@@ -1,22 +1,22 @@
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
+import java.awt.EventQueue;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import java.awt.BorderLayout;
 import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.JLabel;
+import java.awt.Button;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
 
-/**
- * LoginPage
- */
-public class LoginPage extends JFrame {
+public class LoginPage extends JFrame{
 
   // field declarations
+  private JFrame frame;  
   private static JLabel userLabel;
   private static JTextField userText;
   private static JLabel passwordLabel;
@@ -24,7 +24,8 @@ public class LoginPage extends JFrame {
   private static JButton loginButton;
   private static JLabel status;
   private static JButton signUpButton;
-
+  private static JLabel signInLabel;
+  
   void userVerification() {
 
     // method calls specific backend methods to query database and verify user
@@ -36,14 +37,14 @@ public class LoginPage extends JFrame {
       // verifies user and sets status text
       status.setText("Login successful!");
       HomePage home = new HomePage(user);
-      home.show();
       this.dispose();
+      home.setVisible(true);
     } else {
       status.setText("Login failed!");
     }
   }
-
-  void addUser() {
+  
+void addUser() {
     
     // method calls specific backend methods to query database and add user
 
@@ -58,9 +59,8 @@ public class LoginPage extends JFrame {
         // adds user and sets status text
         status.setText("Sign up successful!");
         HomePage home = new HomePage(user);
-        home.show();
         this.dispose();
-
+        home.setVisible(true);
       } else {
         status.setText("Sign up unsuccessful! Please check console for error.");
       }
@@ -71,50 +71,68 @@ public class LoginPage extends JFrame {
 
   }
 
-
+  /**
+   * Create the application.
+   */
   public LoginPage() {
-    
-    setTitle("Login Page"); // set title of app
+    initialize();
+  }
 
-    // setup final frame
-    setSize(800, 500);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLayout(new BorderLayout());
+  /**
+   * Initialize the contents of the frame.
+   */
+  private void initialize() {
     
-    // set central panel 
-    JPanel central = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    central.setPreferredSize(new Dimension(270, 200));
-
-    // setup username and password fields
+    // set the frame
+    setTitle("Login Page");
+    frame = new JFrame();
+    frame.getContentPane().setBackground(Color.WHITE);
+    frame.getContentPane().setLayout(null);
+    
+    // add username label and text field
     userLabel = new JLabel("Username");
-    userLabel.setPreferredSize(new Dimension(80,25));
-    central.add(userLabel);
-
+    userLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+    userLabel.setBounds(224, 89, 68, 16);
+    frame.getContentPane().add(userLabel);
+    
     userText = new JTextField();
-    userText.setPreferredSize(new Dimension(165, 25));
-    central.add(userText);
-
+    userText.setForeground(Color.BLACK);
+    userText.setBackground(Color.WHITE);
+    userText.setBounds(217, 104, 365, 29);
+    frame.getContentPane().add(userText);
+    userText.setColumns(10);
+    
+    // add password label and text field
     passwordLabel = new JLabel("Password");
-    passwordLabel.setPreferredSize(new Dimension(80, 25));
-    central.add(passwordLabel);
-
+    passwordLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+    passwordLabel.setBounds(224, 143, 61, 16);
+    frame.getContentPane().add(passwordLabel);
+    
     passwordText = new JPasswordField();
-    passwordText.setPreferredSize(new Dimension(165, 25));
-    central.add(passwordText);
-
-    // setup login and signup buttons
+    passwordText.setBounds(217, 171, 365, 26);
+    frame.getContentPane().add(passwordText);
+    
+    // add login button
     loginButton = new JButton("Login");
-    loginButton.setPreferredSize(new Dimension(80, 25));
-    central.add(loginButton);
-
+    loginButton.setFont(new Font("SansSerif", Font.PLAIN, 13));
+    loginButton.setForeground(Color.BLACK);
+    loginButton.setBackground(Color.WHITE);
+    loginButton.setBounds(217, 229, 186, 29);
+    frame.getContentPane().add(loginButton);
+    
+    // add signup button
     signUpButton = new JButton("Sign Up");
-    signUpButton.setPreferredSize(new Dimension(80, 25));
-    central.add(signUpButton);
-
-    // setup text for login/sign up status
+    signUpButton.setFont(new Font("SansSerif", Font.PLAIN, 13));
+    signUpButton.setForeground(Color.BLACK);
+    signUpButton.setBackground(Color.WHITE);    
+    signUpButton.setBounds(407, 229, 175, 29);
+    frame.getContentPane().add(signUpButton);
+     
+    // add status text label
     status = new JLabel("");
-    status.setPreferredSize(new Dimension(500, 25));
-    central.add(status);
+    status.setFont(new Font("SansSerif", Font.PLAIN, 13));
+    status.setBounds(217, 270, 365, 16);
+    frame.getContentPane().add(status);
     
     loginButton.addActionListener(new ActionListener() {
 
@@ -130,10 +148,15 @@ public class LoginPage extends JFrame {
         addUser();
       }}); // call backend methods to add user
     
-    add(central, BorderLayout.CENTER);
-
-    setVisible(true);
-
+    // add sign in label 
+    signInLabel = new JLabel("Sign In or Create Account");
+    signInLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+    signInLabel.setBounds(278, 23, 244, 36);
+    
+    frame.getContentPane().add(signInLabel);
+    frame.setBounds(100, 100, 800, 500);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    
+    this.frame.setVisible(true);
   }
-
 }

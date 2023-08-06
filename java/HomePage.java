@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -9,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -16,9 +18,11 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -37,6 +41,7 @@ public class HomePage extends JFrame {
   private static JList<String> genresList;
   private static JList<String> publishersList;
   private static JButton homeBtn = new JButton("Back to Home");
+  // private JTextField rating;
 
   void switchAccountPage() {
     // method to switch to account page
@@ -140,7 +145,7 @@ public class HomePage extends JFrame {
     JPanel bottom = new JPanel();
 
     // add label for our project
-    video_games.setFont(new Font("Calibri", Font.BOLD, 25));
+    video_games.setFont(new Font("SansSerif", Font.BOLD, 25));
     video_games.setPreferredSize(new Dimension(200, 25));
     searchBar.add(video_games);
 
@@ -162,7 +167,7 @@ public class HomePage extends JFrame {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        String[] gamesFound = search(); // call backend methods to search
+        String[] gamesFound = search(); // call backend methods to search and display results
         list = new JList<String>(gamesFound);
         list.setVisibleRowCount(15);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -173,28 +178,59 @@ public class HomePage extends JFrame {
             if (e.getClickCount() == 2) {
 
               results.removeAll(); // remove list of games to replace with info about selected game
-              results.setLayout(new GridLayout(0, 1));
-
+              results.setBackground(Color.WHITE);
+              results.setLayout(null);
+              results.setPreferredSize(new Dimension(1000, 587));
               String gameChosen = list.getSelectedValue(); // get name of game chosen
-              
+
               // get info about game
               String[] game = VideoGames.returnAllData(VideoGames.getGameID(gameChosen));
 
-              JLabel gameName = new JLabel("   Name: " + game[0]);
+              JLabel gameName = new JLabel(game[0]);
+              gameName.setFont(new Font("Helvetica Neue", Font.BOLD, 35));
+              gameName.setBounds(88, 6, 823, 64);
+              gameName.setHorizontalAlignment(SwingConstants.CENTER);
               results.add(gameName);
 
-              JLabel platformName = new JLabel("   Platform: " + game[1]);
+              JLabel platformLabel = new JLabel("Released On: ");
+              platformLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              platformLabel.setBounds(411, 90, 132, 16);
+              results.add(platformLabel);
+
+              JLabel platformName = new JLabel(game[1]);
+              platformName.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              platformName.setBounds(555, 82, 132, 38);
               results.add(platformName);
 
-              JLabel year = new JLabel("   Year released: " + game[2]);
+              JLabel yearLabel = new JLabel("Year of Release:");
+              yearLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              yearLabel.setBounds(384, 143, 159, 16);
+              results.add(yearLabel);
+
+              JLabel year = new JLabel(game[2].substring(0, 4));
+              year.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              year.setBounds(555, 143, 132, 16);
               results.add(year);
 
-              JPanel genrePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+              JLabel genreLabel = new JLabel("Genre:");
+              genreLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              genreLabel.setBounds(434, 197, 62, 16);
+              results.add(genreLabel);
 
-              JLabel gameGenre = new JLabel("   Genre: " + game[3]);
-              genrePanel.add(gameGenre);
+              JLabel genre = new JLabel(game[3]);
+              genre.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              genre.setBounds(519, 190, 132, 31);
+              results.add(genre);
+
+              JSeparator separator = new JSeparator();
+              separator.setForeground(Color.BLACK);
+              separator.setBounds(85, 58, 830, 12);
+              results.add(separator);
 
               JButton likeGenre = new JButton();
+              likeGenre.setBounds(411, 225, 192, 29);
+
+              // switch text of like button based on user value
               if (GenreThoughts.getPref(Genre.getGenreID(game[3]), username) == null
                   || GenreThoughts.getPref(Genre.getGenreID(game[3]), username) == 0) {
                 likeGenre.setText("Like");
@@ -207,9 +243,11 @@ public class HomePage extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                   if (likeGenre.getText().equals("Like")) {
+                    // like the game
                     GenreThoughts.setGenrePref(Genre.getGenreID(game[3]), true, username);
                     likeGenre.setText("Unlike");
                   } else {
+                    // unlike the game
                     GenreThoughts.setGenrePref(Genre.getGenreID(game[3]), false, username);
                     likeGenre.setText("Like");
                   }
@@ -217,24 +255,40 @@ public class HomePage extends JFrame {
 
               });
 
-              genrePanel.add(likeGenre);
+              results.add(likeGenre);
 
-              results.add(genrePanel);
+              JLabel publisherLabel = new JLabel("Published By:");
+              publisherLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              publisherLabel.setBounds(395, 276, 137, 31);
+              results.add(publisherLabel);
 
+              JLabel publisher = new JLabel(game[4]);
+              publisher.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              publisher.setBounds(534, 276, 172, 31);
+              results.add(publisher);
 
-              JLabel publisherName = new JLabel("   Publisher: " + game[4]);
-              results.add(publisherName);
+              JLabel globalSalesLabel = new JLabel("Global Sales (millions) :");
+              globalSalesLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              globalSalesLabel.setBounds(364, 336, 226, 31);
+              results.add(globalSalesLabel);
 
-              JLabel sales = new JLabel("   Global Sales (in millions): " + game[5]);
-              results.add(sales);
+              JLabel globalSales = new JLabel(game[5]);
+              globalSales.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              globalSales.setBounds(602, 336, 95, 31);
+              results.add(globalSales);
 
-              JPanel ratingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-              JLabel ratingLabel = new JLabel("  Rating: ");
-              ratingPanel.add(ratingLabel);
+              JLabel ratingLabel = new JLabel("Rating:");
+              ratingLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              ratingLabel.setBounds(395, 393, 73, 31);
+              results.add(ratingLabel);
 
               Integer userRating =
                   GameThoughts.getRating(VideoGames.getGameID(gameChosen), username);
+
+              JLabel avgLabel = new JLabel("Average Rating:");
+              avgLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              avgLabel.setBounds(423, 439, 159, 31);
+              results.add(avgLabel);
 
               String finalRating = "-";
 
@@ -245,12 +299,22 @@ public class HomePage extends JFrame {
               }
 
               JTextField rating = new JTextField(finalRating, 1);
-              ratingPanel.add(rating);
+              rating.setHorizontalAlignment(SwingConstants.CENTER);
+              rating.setBounds(478, 396, 26, 31);
+              results.add(rating);
 
-              JLabel outOf = new JLabel("/5");
-              ratingPanel.add(outOf);
+              JLabel outOf = new JLabel("/ 5");
+              outOf.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              outOf.setBounds(506, 393, 33, 31);
+              results.add(outOf);
+
+              JSeparator separator_1 = new JSeparator();
+              separator_1.setForeground(Color.BLACK);
+              separator_1.setBounds(88, 569, 830, 12);
+              add(separator_1);
 
               JButton save = new JButton("Save");
+              save.setBounds(551, 395, 117, 29);
               save.addActionListener(new ActionListener() {
 
                 @Override
@@ -265,21 +329,20 @@ public class HomePage extends JFrame {
                 }
 
               });
-              ratingPanel.add(save);
+              results.add(save);
 
               // add average rating
               Double avgRating = GameThoughts.getAvgRating(VideoGames.getGameID(gameChosen));
-              JLabel avgLabel = new JLabel("   Average Rating: " + Double.toString(avgRating));
-              results.remove(ratingPanel);
-              ratingPanel.remove(avgLabel);
-              ratingPanel.add(avgLabel);
+              JLabel avg = new JLabel(Double.toString(avgRating));
+              avg.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              avg.setBounds(584, 439, 33, 31);
+              results.remove(avg);
+              results.add(avg);
 
-              results.add(ratingPanel);
-
-              // make likes panel with button and number of likes
-              JPanel likesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-              JButton likeGame = new JButton();
+              JButton likeGame = new JButton("");
+              likeGame.setBounds(411, 482, 192, 29);
+              
+              // switch text of like button based on user value
               if (GameThoughts.getPref(VideoGames.getGameID(gameChosen), username) == null
                   || GameThoughts.getPref(VideoGames.getGameID(gameChosen), username) == 0) {
                 likeGame.setText("Like");
@@ -301,8 +364,8 @@ public class HomePage extends JFrame {
                 }
 
               });
-
-              likesPanel.add(likeGame);
+              
+              results.add(likeGame);
 
               Integer number = GameThoughts.numLikes(VideoGames.getGameID(gameChosen));
 
@@ -310,11 +373,15 @@ public class HomePage extends JFrame {
                 number = 0;
               }
 
-              JLabel numLikes = new JLabel("   Number of Likes: " + Integer.toString(number));
+              JLabel numLikesLabel = new JLabel("Number of Likes:");
+              numLikesLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              numLikesLabel.setBounds(421, 523, 172, 31);
+              results.add(numLikesLabel);
 
-              likesPanel.add(numLikes);
-
-              results.add(likesPanel);
+              JLabel numLikes = new JLabel(Integer.toString(number));
+              numLikes.setFont(new Font("SansSerif", Font.PLAIN, 20));
+              numLikes.setBounds(596, 523, 33, 31);
+              results.add(numLikes);
 
               revalidate();
               repaint();
@@ -325,7 +392,7 @@ public class HomePage extends JFrame {
         results.setLayout(new FlowLayout());
         JScrollPane games = new JScrollPane(list);
         games.setPreferredSize(new Dimension(800, 500));
-        results.add(games);
+        results.add(games); // show results
 
         // switch to home page button add to screen
         homeBtn.setPreferredSize(new Dimension(180, 25));
