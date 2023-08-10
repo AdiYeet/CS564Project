@@ -7,6 +7,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Publisher class that defines all the necessary methods for the publisher table
+ * 
+ * @author adivakharia, kjhunjhunwa2, tmjohnson32
+ *
+ */
 public class Publisher {
 
   // create strings to store mysql login
@@ -14,6 +20,12 @@ public class Publisher {
   static final String user = "root";
   static final String password = "sqlPass#7";
 
+  /**
+   * returns the publisher_id associated with a given publisher_name
+   * 
+   * @param publisherName
+   * @return
+   */
   public static Integer getPublisherID(String publisherName) {
 
     // method to get publisher ID
@@ -80,6 +92,12 @@ public class Publisher {
     return publisher_id;
   }
 
+  /**
+   * returns the publisher_name associated with a given publisher_id
+   * 
+   * @param publisherID
+   * @return
+   */
   public static String getPublisherName(Integer publisherID) {
 
     // method to get publisher name
@@ -145,6 +163,12 @@ public class Publisher {
     return publisher_name;
   }
 
+  /**
+   * returns a list of all the games that have a specific given publisher
+   * 
+   * @param publisherName
+   * @return
+   */
   public static ArrayList<Integer> searchByPublisher(String publisherName) {
 
     // method to search for all games by publisher
@@ -203,6 +227,10 @@ public class Publisher {
     return resultArray;
   }
 
+  /**
+   * returns a list of each publisher sorted by total sales across all platforms and genres
+   * @return
+   */
   public static ArrayList<String[]> topByPublisher() {
 
     // method to get all publishers sorted by aggregate sales

@@ -7,6 +7,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * GameThoughts class that initializes methods necessary for the game_thoughts table
+ * 
+ * @author adivakharia, kjhunjhunwa2, tmjohnson32
+ *
+ */
 public class GameThoughts {
 
   public static int user_id = 0; // initialize
@@ -234,7 +240,7 @@ public class GameThoughts {
 
         } else { // user_id exists in the game_thoughts table
           String checkGameID = "SELECT EXISTS(SELECT * FROM project.game_thoughts WHERE game_id = "
-              + "\"" + gameID + "\" AND user_id = " +  "\"" + user_id + "\") AS 'check';";
+              + "\"" + gameID + "\" AND user_id = " + "\"" + user_id + "\") AS 'check';";
           checkGameIDSet = statement.executeQuery(checkGameID);
           if (checkGameIDSet.next()) {
             int countGame = checkGameIDSet.getInt("check");
@@ -418,12 +424,19 @@ public class GameThoughts {
     return pref;
   }
 
+  /**
+   * getAvgRating() gets the average rating based on all the users in the database for a specific
+   * game
+   * 
+   * @param gameID
+   * @return
+   */
   public static Double getAvgRating(int gameID) {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet result = null;
     Double avgRating = null;
-    
+
     try {
       // Step 1: Create mysql connector class
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -434,11 +447,11 @@ public class GameThoughts {
       String findAvg = "SELECT AVG(rating) AS avg_rating FROM game_thoughts WHERE game_id = ?";
       preparedStatement = connection.prepareStatement(findAvg);
       preparedStatement.setInt(1, gameID);
-      
+
       result = preparedStatement.executeQuery();
       if (result.next()) {
         avgRating = result.getDouble("avg_rating");
-      } 
+      }
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -465,13 +478,19 @@ public class GameThoughts {
     }
     return avgRating;
   }
-  
+
+  /**
+   * Get the total number of likes for a specific game based on all the users in the database
+   * 
+   * @param gameID
+   * @return
+   */
   public static Integer numLikes(int gameID) {
     Integer count = null;
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet result = null;
-    
+
     try {
       // Step 1: Create mysql connector class
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -479,14 +498,15 @@ public class GameThoughts {
       // Step 2: Initialize connection object
       connection = DriverManager.getConnection(Platform.url, Platform.user, Platform.password);
 
-      String numLiked = "SELECT COUNT(DISTINCT user_id) AS num_liked FROM game_thoughts WHERE game_id = ? AND likes = 1";
+      String numLiked =
+          "SELECT COUNT(DISTINCT user_id) AS num_liked FROM game_thoughts WHERE game_id = ? AND likes = 1";
       preparedStatement = connection.prepareStatement(numLiked);
       preparedStatement.setInt(1, gameID);
-      
+
       result = preparedStatement.executeQuery();
       if (result.next()) {
         count = result.getInt("num_liked");
-      } 
+      }
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -513,7 +533,13 @@ public class GameThoughts {
     }
     return count;
   }
-  
+
+  /**
+   * Gets a list of all the games that a particular user has liked
+   * 
+   * @param username
+   * @return
+   */
   public static ArrayList<Integer> getLikedGames(String username) {
     setCurrUserID(username);
     Connection connection = null;
@@ -541,7 +567,7 @@ public class GameThoughts {
       while (result.next()) {
         resultArray.add(result.getInt("game_id"));
       }
-      
+
     } catch (Exception e) {
       e.printStackTrace();
       return null;

@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.regex.Pattern;
 
+/**
+ * Users class to define all the methods necessary for the users table
+ * 
+ * @author adivakharia, kjhunjhunwa2, tmjohnson32
+ *
+ */
 public class Users {
 
   // create strings to store mysql login
@@ -154,11 +160,17 @@ public class Users {
     return true;
   }
 
-
+  /**
+   * Method to verify that the input username and password match the data in the database
+   * 
+   * @param username
+   * @param password
+   * @return
+   */
   public static boolean verifyUser(String username, String password) {
-    
+
     // method to verify user credentials
-    
+
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;

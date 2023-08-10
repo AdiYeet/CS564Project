@@ -7,9 +7,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * GenreThoughts class that initializes methods necessary for the genre_thoughts table
+ * 
+ * @author adivakharia
+ *
+ */
 public class GenreThoughts {
   public static int user_id = 0;
 
+  /**
+   * Method to set the currUserID based on the given username
+   * 
+   * @param username
+   * @return
+   */
   public static boolean setCurrUserID(String username) {
     Connection connection = null;
     Statement statement = null;
@@ -61,6 +73,14 @@ public class GenreThoughts {
     return true;
   }
 
+  /**
+   * sets the rows inside the genre_thoughts table based on a specific users input
+   * 
+   * @param genreID
+   * @param likes
+   * @param username
+   * @return
+   */
   public static boolean setGenrePref(int genreID, boolean likes, String username) {
     setCurrUserID(username);
 
@@ -138,12 +158,8 @@ public class GenreThoughts {
               statement.executeUpdate(updateRating);
             }
           }
-
         }
       }
-
-
-
     } catch (Exception e) {
       e.printStackTrace();
       return false;
@@ -232,6 +248,12 @@ public class GenreThoughts {
     return pref;
   }
 
+  /**
+   * gets a list of all the genres that a specific user has liked
+   * 
+   * @param username
+   * @return
+   */
   public static ArrayList<Integer> getLikedGenres(String username) {
     setCurrUserID(username);
     Connection connection = null;
@@ -286,9 +308,5 @@ public class GenreThoughts {
     }
 
     return resultArray;
-  }
-  
-  public static void main(String[] args) {
-    setGenrePref(13942, true, "tjohnson");
   }
 }

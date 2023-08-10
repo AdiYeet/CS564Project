@@ -8,14 +8,26 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * VideoGames class that defines all the methods necessary for the video_games table
+ * 
+ * @author adivakharia, kjhunjhunwa2, tmjohnson32
+ *
+ */
 public class VideoGames {
 
+  /**
+   * returns the game_id associated with a given game_name
+   * 
+   * @param gameName
+   * @return
+   */
   public static Integer getGameID(String gameName) {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet result = null;
     Integer gameID = null;
-    
+
     try {
       // Step 1: Create mysql connector class
       Class.forName("com.mysql.cj.jdbc.Driver");
@@ -26,11 +38,11 @@ public class VideoGames {
       String findID = "SELECT game_id FROM project.video_games WHERE game_name = ?";
       preparedStatement = connection.prepareStatement(findID);
       preparedStatement.setString(1, gameName);
-      
+
       result = preparedStatement.executeQuery();
       if (result.next()) {
         gameID = result.getInt("game_id");
-      } 
+      }
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -55,10 +67,10 @@ public class VideoGames {
         }
       }
     }
-    
+
     return gameID;
   }
-  
+
   /**
    * Method that returns all games that are exact matches of the keyword or contain the keyword in
    * part
@@ -92,7 +104,7 @@ public class VideoGames {
       while (result.next()) {
         resultArray.add(result.getInt(1));
       }
-      
+
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -192,6 +204,7 @@ public class VideoGames {
 
   /**
    * Takes in the arraylist of game ids and calls the returnAllData() method on them
+   * 
    * @param gameIDList
    * @return
    */

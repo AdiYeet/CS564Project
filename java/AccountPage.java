@@ -20,6 +20,13 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.ScrollPaneConstants;
 
+/**
+ * AccountPage class that contains the constructor for Account Page, its specifications and related
+ * methods
+ * 
+ * @author avakharia, kjhunjhunwa2, tmjohnson32
+ *
+ */
 @SuppressWarnings({"serial", "unused"})
 public class AccountPage extends JFrame {
 
@@ -35,23 +42,27 @@ public class AccountPage extends JFrame {
   @SuppressWarnings("rawtypes")
   private static JList genresList;
 
+  /**
+   * Method to switch the view to the Login Page
+   */
   void switchLoginPage() {
-    // method to switch to Login Page
     Main.main(null);
     this.dispose();
   }
 
+  /**
+   * Method to switch the view to Home Page
+   */
   void switchHomePage() {
-
-    // method to switch to Home Page
-
     HomePage homePage = new HomePage(username);
     this.dispose();
     homePage.setVisible(true);
   }
 
   /**
-   * Create the frame.
+   * Constructor for the Account Page with its specifications
+   * 
+   * @param username - username of the user currently logged in
    */
   @SuppressWarnings({"static-access", "unchecked", "rawtypes"})
   public AccountPage(String username) {

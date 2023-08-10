@@ -27,6 +27,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.lang.Math;
 
+/**
+ * HomePage class the contains the constructor for the Home Page, its specifications and related
+ * methods
+ * 
+ * @author avakharia, kjhunjhunwa2, tmjohnson32
+ *
+ */
 public class HomePage extends JFrame {
 
   // field declarations
@@ -44,13 +51,18 @@ public class HomePage extends JFrame {
   private static JButton homeBtn = new JButton("Back to Home");
   // private JTextField rating;
 
-  void switchAccountPage() {
-    // method to switch to account page
+  /**
+   * Method to switch the view to account page
+   */
+  void switchAccountPage() { 
     AccountPage accountPage = new AccountPage(username);
     accountPage.show();
     this.dispose();
   }
 
+  /**
+   * Method to switch the view to home page
+   */
   void switchHomePage() {
     // method to switch to Home Page
     HomePage homePage = new HomePage(username);
@@ -58,8 +70,11 @@ public class HomePage extends JFrame {
     this.dispose();
   }
 
+  /**
+   * Method to search for game and return string array of names
+   * @return
+   */
   String[] search() {
-    // method to search for game and return string array of names
     String searchVal = searchField.getText();
     String searchFor = searchType.getSelectedItem().toString();
 
@@ -126,6 +141,11 @@ public class HomePage extends JFrame {
 
   }
 
+  /**
+   * Constructor for the Home Page with its specifications
+   * 
+   * @param username - username of the user that is currently logged in
+   */
   public HomePage(String username) {
 
     this.username = username;
@@ -200,7 +220,7 @@ public class HomePage extends JFrame {
 
               JLabel platformName = new JLabel(game[1]);
               platformName.setFont(new Font("SansSerif", Font.PLAIN, 20));
-              platformName.setBounds(555, 82, 132, 38);
+              platformName.setBounds(555, 79, 132, 38);
               results.add(platformName);
 
               JLabel yearLabel = new JLabel("Year of Release:");
@@ -265,7 +285,7 @@ public class HomePage extends JFrame {
 
               JLabel publisher = new JLabel(game[4]);
               publisher.setFont(new Font("SansSerif", Font.PLAIN, 20));
-              publisher.setBounds(534, 276, 172, 31);
+              publisher.setBounds(534, 276, 372, 31);
               results.add(publisher);
 
               JLabel globalSalesLabel = new JLabel("Global Sales (millions) :");
@@ -343,7 +363,7 @@ public class HomePage extends JFrame {
 
               JButton likeGame = new JButton("");
               likeGame.setBounds(411, 482, 192, 29);
-              
+
               // switch text of like button based on user value
               if (GameThoughts.getPref(VideoGames.getGameID(gameChosen), username) == null
                   || GameThoughts.getPref(VideoGames.getGameID(gameChosen), username) == 0) {
@@ -366,7 +386,7 @@ public class HomePage extends JFrame {
                 }
 
               });
-              
+
               results.add(likeGame);
 
               Integer number = GameThoughts.numLikes(VideoGames.getGameID(gameChosen));

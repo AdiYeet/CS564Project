@@ -10,6 +10,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Platform class that defines all the methods necessary for the platform table
+ * 
+ * @author adivakharia, kjhunjhunwa2, tmjohnson32
+ *
+ */
 public class Platform {
 
   // create strings to store mysql login
@@ -17,6 +23,12 @@ public class Platform {
   static final String user = "root";
   static final String password = "sqlPass#7";
 
+  /**
+   * returns the platform_id associated with a given platform_name
+   * 
+   * @param platformName
+   * @return
+   */
   public static Integer getPlatformID(String platformName) {
     Connection connection = null;
     Statement statement = null;
@@ -80,6 +92,12 @@ public class Platform {
     return platform_id;
   }
 
+  /**
+   * returns the platform_name associated with a given platform_id
+   * 
+   * @param platformID
+   * @return
+   */
   public static String getPlatformName(Integer platformID) {
     Connection connection = null;
     Statement statement = null;
@@ -142,6 +160,12 @@ public class Platform {
     return platform_name;
   }
 
+  /**
+   * returns a list of all the games that have a specific given platform
+   * 
+   * @param platformName
+   * @return
+   */
   public static ArrayList<Integer> searchByPlatform(String platformName) {
     Connection connection = null;
     Statement statement = null;
@@ -196,6 +220,10 @@ public class Platform {
     return resultArray;
   }
 
+  /**
+   * Returns a list of each platform sorted by most sales across all genres 
+   * @return
+   */
   public static ArrayList<String[]> topByPlatform() {
     ArrayList<String[]> returnArray = new ArrayList<>();
 

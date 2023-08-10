@@ -7,6 +7,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Genre class that has all the specifications for the genre table with its related methods
+ * 
+ * @author adivakharia, kjhunjhunwa2, tmjohnson32
+ *
+ */
 public class Genre {
 
   // create strings to store mysql login
@@ -14,6 +20,12 @@ public class Genre {
   static final String user = "root";
   static final String password = "sqlPass#7";
 
+  /**
+   * Gets the associated genre_id for a specific genre_name in the database
+   * 
+   * @param genreName
+   * @return
+   */
   public static Integer getGenreID(String genreName) {
     Connection connection = null;
     Statement statement = null;
@@ -77,6 +89,12 @@ public class Genre {
     return genre_id;
   }
 
+  /**
+   * get the associated genre_name based on a given genre_id in the database
+   * 
+   * @param genreID
+   * @return
+   */
   public static String getGenreName(Integer genreID) {
     Connection connection = null;
     Statement statement = null;
@@ -139,6 +157,12 @@ public class Genre {
     return genre_name;
   }
 
+  /**
+   * gets a list of all games in the database that have a particular given genre
+   * 
+   * @param genreName
+   * @return
+   */
   public static ArrayList<Integer> searchByGenre(String genreName) {
     Connection connection = null;
     Statement statement = null;
@@ -193,6 +217,11 @@ public class Genre {
     return resultArray;
   }
 
+  /**
+   * Returns the top genres based on total sales across platforms
+   * 
+   * @return
+   */
   public static ArrayList<String[]> topByGenre() {
     ArrayList<String[]> returnArray = new ArrayList<>();
 
@@ -212,10 +241,8 @@ public class Genre {
 
       // Create result set and query to retrieve data from
       String topByGenre = "SELECT g.genre_name, SUM(vg.global_sales) AS total_sales "
-          + "FROM video_games vg " 
-          + "JOIN genre g ON vg.genre_id = g.genre_id " 
-          + "GROUP BY g.genre_name " 
-          + "ORDER BY total_sales DESC";
+          + "FROM video_games vg " + "JOIN genre g ON vg.genre_id = g.genre_id "
+          + "GROUP BY g.genre_name " + "ORDER BY total_sales DESC";
 
       result = statement.executeQuery(topByGenre);
 
